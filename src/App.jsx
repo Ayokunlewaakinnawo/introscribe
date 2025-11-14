@@ -249,7 +249,7 @@ export default function introscribeLanding() {
             <br /> Meetings and Conversations.
           </h1>
           <p className="mt-4 text-pretty text-white/80 dark:text-zinc-300 hero-lead hero-cta-animate">
-            Transcribe every word, capture every insight, and get intelligent suggestions <br /> all in real time.
+            Transcribe every word, capture every insight, and get intelligent suggestions all in real time.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
             <a href="/download/introscribe-Setup-1.0.0.exe" download className="download-btn glassy" title="Download Windows installer">
