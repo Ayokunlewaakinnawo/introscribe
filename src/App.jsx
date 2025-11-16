@@ -6,7 +6,7 @@ import { ArrowRight, Check, ChevronDown, Moon, Sun, Star, Play, Shield, Wallet, 
 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
-  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.0.exe`;
+  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.1.exe`;
   const macInstaller = `${baseUrl}download/introscribe-1.0.0-arm64.dmg`;
   const [dark, setDark] = useState(() => {
     // Initialize from localStorage or system preference
@@ -255,7 +255,7 @@ export default function introscribeLanding() {
             Transcribe every word, capture every insight, and get intelligent suggestions all in real time.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
-            <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+            <a href={windowsInstaller} download="introscribe-Setup-1.0.1.exe" className="download-btn glassy" title="Download Windows installer">
               <span className="download-icon-box">
                 {/* Windows icon */}
                 <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -496,7 +496,7 @@ export default function introscribeLanding() {
                 AI companion—recording, transcribing, and guiding every conversation in real time.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+                <a href={windowsInstaller} download="introscribe-Setup-1.0.1.exe" className="download-btn glassy" title="Download Windows installer">
                   <span className="download-icon-box">
                     {/* Windows icon (updated 4-pane) */}
                     <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -605,7 +605,7 @@ export default function introscribeLanding() {
           <div>
             <div className="font-semibold">Get the App</div>
             <div className="mt-3 flex gap-3">
-              <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
+              <a href={windowsInstaller} download="introscribe-Setup-1.0.1.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
                 <span className="download-icon-box">
                   {/* Windows icon */}
                   <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
