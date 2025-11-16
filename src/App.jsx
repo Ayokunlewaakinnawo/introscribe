@@ -5,6 +5,9 @@ import { ArrowRight, Check, ChevronDown, Moon, Sun, Star, Play, Shield, Wallet, 
 // Tailwind CSS is available in this Canvas preview.
 
 export default function introscribeLanding() {
+  const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
+  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.0.exe`;
+  const macInstaller = `${baseUrl}download/introscribe-1.0.0-arm64.dmg`;
   const [dark, setDark] = useState(() => {
     // Initialize from localStorage or system preference
     try {
@@ -252,7 +255,7 @@ export default function introscribeLanding() {
             Transcribe every word, capture every insight, and get intelligent suggestions all in real time.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
-            <a href="/download/introscribe-Setup-1.0.0.exe" download className="download-btn glassy" title="Download Windows installer">
+            <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
               <span className="download-icon-box">
                 {/* Windows icon */}
                 <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -266,12 +269,17 @@ export default function introscribeLanding() {
               </span>
               Get for Windows
             </a>
-            <button className="download-btn download-btn--mac glassy">
+            <a
+              href={macInstaller}
+              download="introscribe-1.0.0-arm64.dmg"
+              className="download-btn download-btn--mac glassy"
+              title="Download macOS installer"
+            >
               <span className="download-icon-box">
                 <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
               </span>
               Get for Mac OS
-            </button>
+            </a>
           </div>
           </div>
         <div className="mx-auto mt-12 w-full max-w-4xl px-4 phone-mock-animate">
@@ -488,7 +496,7 @@ export default function introscribeLanding() {
                 AI companion—recording, transcribing, and guiding every conversation in real time.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <a href="/download/introscribe-Setup-1.0.0.exe" download className="download-btn glassy" title="Download Windows installer">
+                <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
                   <span className="download-icon-box">
                     {/* Windows icon (updated 4-pane) */}
                     <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -502,12 +510,17 @@ export default function introscribeLanding() {
                   </span>
                   Get for Windows
                 </a>
-                <button className="download-btn download-btn--mac glassy">
+                <a
+                  href={macInstaller}
+                  download="introscribe-1.0.0-arm64.dmg"
+                  className="download-btn download-btn--mac glassy"
+                  title="Download macOS installer"
+                >
                   <span className="download-icon-box">
                     <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
                   </span>
                   Get for Mac OS
-                </button>
+                </a>
               </div>
             </div>
             <div className="relative">
@@ -592,7 +605,7 @@ export default function introscribeLanding() {
           <div>
             <div className="font-semibold">Get the App</div>
             <div className="mt-3 flex gap-3">
-              <a href="/download/introscribe-Setup-1.0.0.exe" download className="download-btn glassy download-btn--sm" title="Download Windows installer">
+              <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
                 <span className="download-icon-box">
                   {/* Windows icon */}
                   <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -606,12 +619,17 @@ export default function introscribeLanding() {
                 </span>
                 Windows
               </a>
-              <button className="download-btn download-btn--mac glassy download-btn--sm">
+              <a
+                href={macInstaller}
+                download="introscribe-1.0.0-arm64.dmg"
+                className="download-btn download-btn--mac glassy download-btn--sm"
+                title="Download macOS installer"
+              >
                 <span className="download-icon-box">
                   <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
                 </span>
                 Mac OS
-              </button>
+              </a>
             </div>
           </div>
         </div>
