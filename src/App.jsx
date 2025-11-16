@@ -7,7 +7,7 @@ import { ArrowRight, Check, ChevronDown, Moon, Sun, Star, Play, Shield, Wallet, 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
   const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.0.exe`;
-  const macInstaller = `${baseUrl}download/introscribe-1.0.0-arm64.dmg`;
+  const macInstaller = `${baseUrl}download/introscribe-1.0.1-tmp-arm64.dmg`;
   const [dark, setDark] = useState(() => {
     // Initialize from localStorage or system preference
     try {
@@ -271,7 +271,7 @@ export default function introscribeLanding() {
             </a>
             <a
               href={macInstaller}
-              download="introscribe-1.0.0-arm64.dmg"
+              download="introscribe-1.0.1-tmp-arm64.dmg"
               className="download-btn download-btn--mac glassy"
               title="Download macOS installer"
             >
@@ -512,7 +512,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.0-arm64.dmg"
+                  download="introscribe-1.0.1-tmp-arm64.dmg"
                   className="download-btn download-btn--mac glassy"
                   title="Download macOS installer"
                 >
@@ -621,7 +621,7 @@ export default function introscribeLanding() {
               </a>
               <a
                 href={macInstaller}
-                download="introscribe-1.0.0-arm64.dmg"
+                download="introscribe-1.0.1-tmp-arm64.dmg"
                 className="download-btn download-btn--mac glassy download-btn--sm"
                 title="Download macOS installer"
               >
