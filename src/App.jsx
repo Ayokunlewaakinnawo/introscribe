@@ -1,3 +1,5 @@
+
+import React, { useEffect, useRef, useState } from "react";
 import {
   Brain,
   Check,
@@ -11,12 +13,11 @@ import {
   Sun,
   Zap,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
 
-export default function introscribeLanding() {
+export default function App() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? "/").replace(/\/?$/, "/");
   const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.0.exe`;
   const macInstaller = `${baseUrl}download/introscribe-1.0.0-arm64.dmg`;
