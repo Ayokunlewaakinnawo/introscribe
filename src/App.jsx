@@ -1,5 +1,3 @@
-
-import React, { useEffect, useRef, useState } from "react";
 import {
   Brain,
   Check,
@@ -13,6 +11,7 @@ import {
   Sun,
   Zap,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
