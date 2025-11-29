@@ -14,7 +14,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 // Single-file, production-ready landing page inspired by the provided mockup.
-// Tailwind CSS is available in this Canvas preview.
+// Tailwind CSS is available in this Canvas preview. (with dark mode support)
 
 export default function App() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? "/").replace(/\/?$/, "/");
