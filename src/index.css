@@ -38,20 +38,21 @@ body {
 /* Landing (hero) background images only */
 .landing-bg {
 	/* Add a semi-transparent white overlay over day image to reduce visual intensity */
-	background-image: linear-gradient(rgba(255, 255, 255, 0.308), rgba(255, 255, 255, 0.476)), url(/mainbg.jpg);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.308), rgba(255, 255, 255, 0.476)), url(/maingb-light.webp);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-blend-mode: overlay;
 	position: relative; /* establish positioning context for pseudo elements */
 	isolation: isolate; /* ensure negative z-index children stay behind content */
+	min-height: 100vh; /* ensure hero background fills viewport height */
 }
 .landing-bg::before {
 	content: "";
 	position: absolute;
 	inset: 0;
 	/* Night image with dark overlay to soften */
-	background-image: linear-gradient(rgba(219, 216, 216, 0.651), rgba(179, 179, 179, 0.55)), url(/mainbg.png);
+	background-image: linear-gradient(rgba(219, 216, 216, 0.651), rgba(179, 179, 179, 0.55)), url(/mainbg-dark.png);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -153,24 +154,40 @@ body {
 
 /* Subtle text glow for white hero text over light imagery */
 .hero-text-glow h1 {
-    font-size: 50px;
+	font-size: 65px;
+	font-weight: 350;
+	color: rgba(20, 20, 20, 0.805);
+	font-family: "Times New Roman", Times, serif;
 	/* Strong multi-layer shadow for high visibility over busy backgrounds */
-	text-shadow:
-		0 1px 2px rgba(0, 0, 0, 0.322),
-		0 3px 6px rgba(0, 0, 0, 0.164),
-		0 8px 24px rgba(0, 0, 0, 0.106),
-		0 16px 40px rgba(0, 0, 0, 0.027);
+	
+}
+.dark .hero-text-glow h1 {
+  	color: rgba(240, 240, 240, 0.85);
 }
 /* Hero lead paragraph explicit size */
-.hero-lead, .hero-text-glow p { font-size: 19px; line-height: 1.42; font-weight: 500; text-shadow: 
-    0 1px 2px rgba(0, 0, 0, 0.113),
-    0 3px 8px rgba(0, 0, 0, 0.144),
-    0 10px 28px rgba(0, 0, 0, 0.271);}
+.hero-lead, .hero-text-glow p { font-size: 19px; line-height: 1.42; font-weight: 500; 
+	color: rgba(20, 20, 20, 0.805);
+}
 
 /* CTA header strong readable shadow over image background */
 .cta-head-shadow {
 	text-shadow: 0 2px 4px rgba(0,0,0,0.25), 0 6px 12px rgba(0,0,0,0.15);
 }
+
+.hero-typed {
+	display: inline-block;
+	min-width: 13ch; /* prevents layout jump between longest/shortest words */
+}
+.typing-caret {
+	display: inline-block;
+	width: 2px;
+	height: 1.05em;
+	margin-left: 4px;
+	background: currentColor;
+	animation: caretBlink 1s steps(1) infinite;
+	vertical-align: -2px;
+}
+@keyframes caretBlink { 50% { opacity: 0; } }
 
 /* Benefit cards liquid glass style */
 .benefit-glass {
@@ -501,14 +518,14 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: .55rem;
-	padding: .9rem 1.4rem;
+	padding: .52rem 1.2rem;
 	border-radius: 10px;
 	font-size: .9rem;
 	font-weight: 600;
 	line-height: 1;
 	color: #ffffff;
-	background: linear-gradient(135deg,#0b4ed8 0%,#0e63ff 65%,#1b75ff 100%);
-	box-shadow: 0 6px 22px -8px rgba(11,78,216,0.55), 0 2px 4px -1px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.20) inset;
+	background: linear-gradient(140deg,#0a3dff 0%,#0c65ff 55%,#137eff 80%,#2ba5ff 100%);
+	box-shadow: 0 10px 28px -12px rgba(12,61,255,0.65), 0 6px 14px -8px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.22) inset, 0 0 0 1px rgba(12,61,255,0.5);
 	transition: box-shadow .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1), background .45s;
 	-webkit-backdrop-filter: blur(4px);
 	backdrop-filter: blur(4px);
@@ -518,22 +535,48 @@ body {
 	content:"";
 	position:absolute;
 	inset:0;
-	background:linear-gradient(180deg,rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.08) 55%,rgba(255,255,255,0) 100%);
+	background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,rgba(255,255,255,0.06) 55%,rgba(255,255,255,0) 100%);
 	opacity:.7;
 	pointer-events:none;
 	mix-blend-mode:overlay;
 	border-radius:inherit;
 }
+.download-btn::after {
+	content:"";
+	position:absolute;
+	inset:0;
+	background: linear-gradient(110deg,
+		transparent 0%,
+		transparent 47%,
+		rgba(255,255,255,0.55) 49%,
+		rgba(255,255,255,0.75) 50%,
+		rgba(255,255,255,0.55) 51%,
+		transparent 53%,
+		transparent 100%);
+	opacity:.55;
+	mix-blend-mode:screen;
+	border-radius: inherit;
+	transform: translateX(-140%);
+	filter: blur(.3px);
+	animation: buttonGlare 2.2s ease-in-out infinite;
+	animation-delay: 0s;
+}
 .download-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 36px -10px rgba(11,78,216,0.65), 0 4px 10px -2px rgba(0,0,0,0.35); }
 .download-btn:active { transform: translateY(-1px); box-shadow: 0 6px 18px -6px rgba(11,78,216,0.6); }
 
 .download-btn--mac {
-	background: linear-gradient(135deg,#1e2530 0%,#303a44 60%,#4a5866 100%);
-	box-shadow: 0 6px 22px -8px rgba(30,40,55,0.55), 0 2px 4px -1px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.18) inset;
+	background: linear-gradient(140deg,#0a3dff 0%,#0c65ff 55%,#137eff 80%,#2ba5ff 100%);
+	box-shadow: 0 10px 28px -12px rgba(12,61,255,0.65), 0 6px 14px -8px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.22) inset, 0 0 0 1px rgba(12,61,255,0.5);
 }
 .download-btn--mac:hover { box-shadow: 0 12px 34px -10px rgba(40,50,65,0.65), 0 4px 10px -2px rgba(0,0,0,0.45); }
 .dark .download-btn--mac { background: linear-gradient(135deg,#2a333d 0%,#38444f 60%,#566574 100%); }
 .dark .download-btn { box-shadow: 0 6px 22px -8px rgba(13,106,255,0.55), 0 2px 4px -1px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.16) inset; }
+
+@keyframes buttonGlare {
+	0% { transform: translateX(-140%); }
+	50% { transform: translateX(140%); }
+	100% { transform: translateX(140%); }
+}
 
 .download-icon-box {
 	width: 20px;
@@ -583,9 +626,27 @@ body {
 }
 /* Top sheen */
 .download-btn.glassy::after {
-	background: linear-gradient(180deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.08) 58%,rgba(255,255,255,0) 100%);
+	background:
+		linear-gradient(180deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.08) 58%,rgba(255,255,255,0) 100%),
+		linear-gradient(110deg,
+			transparent 0%,
+			transparent 47%,
+			rgba(255,255,255,0.55) 49%,
+			rgba(255,255,255,0.75) 50%,
+			rgba(255,255,255,0.55) 51%,
+			transparent 53%,
+			transparent 100%);
+	background-size: 100% 100%, 180% 130%;
+	background-position: center, -140% 0;
 	mix-blend-mode:screen;
-	opacity:.7;
+	opacity:.2;
+	filter: blur(.3px);
+	animation: buttonGlare 2.2s ease-in-out infinite;
+}
+
+.download-btn--mac::after,
+.download-btn--mac.glassy::after {
+	animation-delay: .8s; /* stagger so both glares don’t sync */
 }
 .download-btn.glassy:hover {
 	transform: translateY(-4px);
@@ -598,7 +659,7 @@ body {
 
 /* Small variant for download buttons */
 .download-btn--sm {
-	padding: .65rem .95rem;
+	padding: .52rem .85rem;
 	font-size: .75rem;
 	gap: .45rem;
 }
@@ -618,6 +679,24 @@ body {
 }
 @media (min-width: 768px) { /* md */
 	.section-heading { font-size: 2.25rem; }
+}
+
+/* Mobile header sizing tweaks */
+@media (max-width: 640px) {
+	.hero-text-glow h1 { font-size: 1.95rem; line-height: 1.1; }
+	.hero-lead, .hero-text-glow p { font-size: 1rem; }
+	h1 { font-size: 1.9rem; }
+	h2 { font-size: 1.4rem; }
+	h3 { font-size: 1.2rem; }
+	h4 { font-size: 1.05rem; }
+	.price-number { font-size: 2rem; }
+	.section-heading { font-size: 1.6rem; }
+	.max-w-6xl { padding-top: 1rem; }
+	.landing-bg { padding-top: 9.5rem; }
+}
+
+@media (max-width: 768px) {
+	.hero-text-glow h1 { font-size: 48px; line-height: 1.08; margin-top: 20px; }
 }
 
 /* ================= Entrance Animations ================= */
@@ -651,3 +730,7 @@ body {
 	.hero-title-animate,
 	.phone-mock-animate { animation: none !important; opacity:1 !important; transform:none !important; }
 }
+
+/* Mockup container + fade */
+.mockup-container { border-top-left-radius: 8px; border-top-right-radius: 5.5px; }
+.mockup-video { border-top-left-radius: 8px; border-top-right-radius: 5.5px; }

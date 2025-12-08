@@ -4,6 +4,8 @@ import React from "react";
 import { Brain, Check, ChevronDown, Clock10, HatGlasses, MessageCircle, Mic, Moon, Shield, Sun, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
+
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
 
@@ -25,6 +27,10 @@ export default function introscribeLanding() {
   const monthlyBtnRef = useRef(null);
   const yearlyBtnRef = useRef(null);
   const indicatorRef = useRef(null);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [typedText, setTypedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [os, setOs] = useState("unknown");
 
   // Resize & position billing toggle indicator to match active button
   useEffect(() => {
@@ -64,6 +70,50 @@ export default function introscribeLanding() {
       try { localStorage.setItem('theme', 'light'); } catch {}
     }
   }, [dark]);
+  // Typed hero headline animation
+  useEffect(() => {
+    const currentWord = HERO_WORDS[wordIndex];
+    let delay = isDeleting ? 65 : 110;
+
+    if (!isDeleting && typedText === currentWord) {
+      delay = 1200; // pause after finishing a word
+    } else if (isDeleting && typedText === "") {
+      delay = 350; // slight pause before typing the next word
+    }
+
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (typedText.length < currentWord.length) {
+          setTypedText(currentWord.slice(0, typedText.length + 1));
+        } else {
+          setIsDeleting(true);
+        }
+      } else {
+        if (typedText.length > 0) {
+          setTypedText(currentWord.slice(0, typedText.length - 1));
+        } else {
+          setIsDeleting(false);
+          setWordIndex((wordIndex + 1) % HERO_WORDS.length);
+        }
+      }
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, wordIndex]);
+
+  // Detect platform to show the relevant installer
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    if (/Mac|MacIntel|MacPPC|Mac68K/.test(platform) || /Mac OS X/.test(ua)) {
+      setOs("mac");
+    } else if (/Win/.test(platform) || /Windows/.test(ua)) {
+      setOs("windows");
+    } else {
+      setOs("other");
+    }
+  }, []);
 
   // Features / Benefits / Plans / FAQs (AI meeting assistant theme)
   const features = [
@@ -207,7 +257,7 @@ export default function introscribeLanding() {
   return (
   <div className="min-h-screen text-zinc-900 dark:text-white">
       {/* Nav */}
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-md dark:bg-zinc-950/70 dark:border-white/10">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 relative h-[30px]">
             {/* Light mode logo */}
@@ -251,47 +301,74 @@ export default function introscribeLanding() {
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center text-white hero-text-glow">
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl hero-title-animate">
-           Your Real-Time AI Assistant for
-            <br /> Meetings and Conversations.
+           Your Real-Time AI Assistant
+            <br />
+            <span className="hero-typed">for {typedText}<span className="typing-caret" aria-hidden="true"></span></span>
           </h1>
           <p className="mt-4 text-pretty text-white/80 dark:text-zinc-300 hero-lead hero-cta-animate">
-            Transcribe every word, capture every insight, and get intelligent suggestions all in real time.
+            Transcribe every word, capture every insight, <br /> and get intelligent suggestions all in real time.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
-            <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
-              <span className="download-icon-box">
-                {/* Windows icon */}
-                <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                  <g>
-                    <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                    <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                    <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                    <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                  </g>
-                </svg>
-              </span>
-              Get for Windows
-            </a>
-            <a
-              href={macInstaller}
-              download="introscribe-1.0.0-arm64.dmg"
-              className="download-btn download-btn--mac glassy"
-              title="Download macOS installer"
-            >
-              <span className="download-icon-box">
-                <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-              </span>
-              Get for Mac OS
-            </a>
+            {os === "mac" ? (
+              <a
+                href={macInstaller}
+                download="introscribe-1.0.0-arm64.dmg"
+                className="download-btn download-btn--mac glassy"
+                title="Download macOS installer"
+              >
+                <span className="download-icon-box">
+                  <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
+                </span>
+                Get for Mac OS
+              </a>
+            ) : os === "windows" ? (
+              <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+                <span className="download-icon-box">
+                  {/* Windows icon */}
+                  <svg fill="#ffffff" width="18" height="18" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>microsoft</title> <path d="M16.742 16.742v14.253h14.253v-14.253zM1.004 16.742v14.253h14.256v-14.253zM16.742 1.004v14.256h14.253v-14.256zM1.004 1.004v14.256h14.256v-14.256z"></path> </g></svg>
+                </span>
+                Get for Windows
+              </a>
+            ) : (
+              <>
+                <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+                  <span className="download-icon-box">
+                    {/* Windows icon */}
+                    <svg width="15" height="15" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <g>
+                        <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+                        <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+                        <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+                        <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+                      </g>
+                    </svg>
+                  </span>
+                  Get for Windows
+                </a>
+                <a
+                  href={macInstaller}
+                  download="introscribe-1.0.0-arm64.dmg"
+                  className="download-btn download-btn--mac glassy"
+                  title="Download macOS installer"
+                >
+                  <span className="download-icon-box">
+                    <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
+                  </span>
+                  Get for Mac OS
+                </a>
+              </>
+            )}
           </div>
           </div>
-        <div className="mx-auto mt-12 w-full max-w-4xl px-4 phone-mock-animate">
-          <img
-            src="/main-i.png"
-            alt="Product interface overview"
-            className="mx-auto w-full max-w-[860px] rounded-3xl shadow-[0_28px_60px_-18px_rgba(0,0,0,0.35),0_8px_24px_-6px_rgba(0,0,0,0.25)] dark:shadow-[0_28px_60px_-18px_rgba(0,60,180,0.25),0_8px_28px_-8px_rgba(40,120,220,0.35)]"
-            loading="eager"
-            decoding="async"
+        <div className="relative mx-auto mt-12 w-full max-w-4xl px-4 phone-mock-animate mockup-container overflow-hidden">
+          <video
+            src="/app_design_main.mp4"
+            className="mx-auto w-full max-w-[860px] mockup-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls={false}
           />
         </div>
         </div>
@@ -499,31 +576,62 @@ export default function introscribeLanding() {
                 AI companion—recording, transcribing, and guiding every conversation in real time.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
-                  <span className="download-icon-box">
-                    {/* Windows icon (updated 4-pane) */}
-                    <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <g>
-                        <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                        <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                        <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                        <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                      </g>
-                    </svg>
-                  </span>
-                  Get for Windows
-                </a>
-                <a
-                  href={macInstaller}
-                  download="introscribe-1.0.0-arm64.dmg"
-                  className="download-btn download-btn--mac glassy"
-                  title="Download macOS installer"
-                >
-                  <span className="download-icon-box">
-                    <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-                  </span>
-                  Get for Mac OS
-                </a>
+                {os === "mac" ? (
+                  <a
+                    href={macInstaller}
+                    download="introscribe-1.0.0-arm64.dmg"
+                    className="download-btn download-btn--mac glassy"
+                    title="Download macOS installer"
+                  >
+                    <span className="download-icon-box">
+                      <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
+                    </span>
+                    Get for Mac OS
+                  </a>
+                ) : os === "windows" ? (
+                  <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+                    <span className="download-icon-box">
+                      {/* Windows icon (updated 4-pane) */}
+                      <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <g>
+                          <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+                          <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+                          <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+                          <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+                        </g>
+                      </svg>
+                    </span>
+                    Get for Windows
+                  </a>
+                ) : (
+                  <>
+                    <a href={windowsInstaller} download="introscribe-Setup-1.0.0.exe" className="download-btn glassy" title="Download Windows installer">
+                      <span className="download-icon-box">
+                        {/* Windows icon (updated 4-pane) */}
+                        <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                          <g>
+                            <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+                            <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+                            <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+                            <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+                          </g>
+                        </svg>
+                      </span>
+                      Get for Windows
+                    </a>
+                    <a
+                      href={macInstaller}
+                      download="introscribe-1.0.0-arm64.dmg"
+                      className="download-btn download-btn--mac glassy"
+                      title="Download macOS installer"
+                    >
+                      <span className="download-icon-box">
+                        <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
+                      </span>
+                      Get for Mac OS
+                    </a>
+                  </>
+                )}
               </div>
             </div>
             <div className="relative">
