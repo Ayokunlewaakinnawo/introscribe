@@ -173,7 +173,7 @@ export default function introscribeLanding() {
       priceY: 0,
       bullets: [
         "Unlimited live transcription",
-        "5 AI summaries / month",
+        "5 AI Assistant responses / month",
         "Basic action items",
         "Email support",
       ],
@@ -181,7 +181,7 @@ export default function introscribeLanding() {
       highlight: false,
     },
     {
-      name: "Pro",
+      name: "Plus",
       priceM: 11.99,
       priceY: 119.99, // approx monthly * 10
       bullets: [
@@ -189,21 +189,22 @@ export default function introscribeLanding() {
         "Unlimited AI summaries",
         "Advanced action item parsing",
         "Multi‑language (30+) support",
-        "Priority support",
+        "Multiple personas (up to 5)",
       ],
       cta: "Get started",
       highlight: true,
     },
     {
-      name: "Enterprise",
+      name: "Pro",
       priceM: 29.99,
       priceY: 199.99,
       bullets: [
-        "Everything in Pro",
-        "Admin roles & audit logs",
-        "SOC2 / GDPR tooling",
-        "Calendar & CRM integrations",
-        "Dedicated CSM & SLA",
+        "All PLUS features",
+        "⭐ Undetectable overlay mode",
+        "⭐ Advanced privacy with screen use (hidden UI while screensharing)",
+        "Unlimited AI Assistant responses",
+        "Unlimited persona uploads",
+        
       ],
       cta: "Book a Call",
       highlight: false,
@@ -507,7 +508,14 @@ export default function introscribeLanding() {
                   </li>
                 ))}
               </ul>
-              {p.cta === 'Book a Call' ? (
+              {p.name === 'Plus' || p.name === 'Pro' ? (
+                <a
+                  href={`https://app.introscribe.com/?plan=${p.name.toLowerCase()}`}
+                  className="btn-muted pricing-card-cta pricing-cta-glass text-center"
+                >
+                  Get started
+                </a>
+              ) : p.cta === 'Book a Call' ? (
                 <button className="btn-gradient pricing-card-cta pricing-cta-glass">Get started</button>
               ) : (
                 <button className="btn-muted pricing-card-cta pricing-cta-glass">Get started</button>
