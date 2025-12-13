@@ -12,7 +12,7 @@ const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
   const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.3.exe`;
-  const macInstaller = `${baseUrl}download/introscribe-1.0.0-arm64.dmg`;
+  const macInstaller = `${baseUrl}download/introscribe-1.0.3-arm64.dmg`;
   const [dark, setDark] = useState(() => {
     // Initialize from localStorage or system preference
     try {
@@ -313,7 +313,7 @@ export default function introscribeLanding() {
             {os === "mac" ? (
               <a
                 href={macInstaller}
-                download="introscribe-1.0.0-arm64.dmg"
+                download="introscribe-1.0.3-arm64.dmg"
                 className="download-btn download-btn--mac glassy"
                 title="Download macOS installer"
               >
@@ -348,7 +348,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.0-arm64.dmg"
+                  download="introscribe-1.0.3-arm64.dmg"
                   className="download-btn download-btn--mac glassy"
                   title="Download macOS installer"
                 >
@@ -587,7 +587,7 @@ export default function introscribeLanding() {
                 {os === "mac" ? (
                   <a
                     href={macInstaller}
-                    download="introscribe-1.0.0-arm64.dmg"
+                    download="introscribe-1.0.3-arm64.dmg"
                     className="download-btn download-btn--mac glassy"
                     title="Download macOS installer"
                   >
@@ -629,7 +629,7 @@ export default function introscribeLanding() {
                     </a>
                     <a
                       href={macInstaller}
-                      download="introscribe-1.0.0-arm64.dmg"
+                      download="introscribe-1.0.3-arm64.dmg"
                       className="download-btn download-btn--mac glassy"
                       title="Download macOS installer"
                     >
@@ -740,7 +740,7 @@ export default function introscribeLanding() {
               </a>
               <a
                 href={macInstaller}
-                download="introscribe-1.0.0-arm64.dmg"
+                download="introscribe-1.0.3-arm64.dmg"
                 className="download-btn download-btn--mac glassy download-btn--sm"
                 title="Download macOS installer"
               >
