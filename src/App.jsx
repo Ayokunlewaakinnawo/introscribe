@@ -31,6 +31,8 @@ export default function introscribeLanding() {
   const [typedText, setTypedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [os, setOs] = useState("unknown");
+  const [showFreeDownloads, setShowFreeDownloads] = useState(false);
+  const freeDropdownRef = useRef(null);
 
   // Resize & position billing toggle indicator to match active button
   useEffect(() => {
@@ -115,6 +117,16 @@ export default function introscribeLanding() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (freeDropdownRef.current && !freeDropdownRef.current.contains(e.target)) {
+        setShowFreeDownloads(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   // Features / Benefits / Plans / FAQs (AI meeting assistant theme)
   const features = [
     {
@@ -168,43 +180,42 @@ export default function introscribeLanding() {
 
   const plans = [
     {
-      name: "Starter",
+      name: "Free Plan",
+      slug: "free",
       priceM: 0,
       priceY: 0,
       bullets: [
-        "Unlimited live transcription",
-        "5 AI Assistant responses / month",
-        "Basic action items",
-        "Email support",
+        "Limited AI responses",
+        "Limited meeting notetaking",
+        "Limited custom response instructions & file uploads",
+        "Ask AI about all your past meetings",
       ],
       cta: "Get started",
       highlight: false,
     },
     {
-      name: "Plus",
+      name: "Plus Plan",
+      slug: "plus",
       priceM: 11.99,
       priceY: 115.10, // monthly * 12 with 20% annual discount
       bullets: [
-        "Everything in Starter",
-        "Unlimited AI summaries",
-        "Advanced action item parsing",
-        "Multi‑language (30+) support",
-        "Multiple personas (up to 5)",
+        "Unlimited AI responses",
+        "Unlimited meeting notetaking",
+        "Unlimited access to the latest AI models",
+        "Unlimited custom response instructions (Personas) & file uploads",
+        "Priority support",
       ],
       cta: "Get started",
       highlight: true,
     },
     {
-      name: "Pro",
+      name: "Pro Plan",
+      slug: "pro",
       priceM: 29.99,
       priceY: 287.90, // monthly * 12 with 20% annual discount
       bullets: [
-        "All PLUS features",
-        "⭐ Undetectable overlay mode",
-        "⭐ Advanced privacy with screen use (hidden UI while screensharing)",
-        "Unlimited AI Assistant responses",
-        "Unlimited persona uploads",
-        
+        "Everything included in the Plus plan",
+        "Completely hidden from meeting screen-sharing software",
       ],
       cta: "Book a Call",
       highlight: false,
@@ -242,18 +253,31 @@ export default function introscribeLanding() {
     },
   ];
 
-  const Price = ({ amount }) => (
-    <div className="flex items-baseline gap-2">
-      {amount === 0 ? (
-        <span className="price-number text-lg font-semibold">Free</span>
-      ) : (
-        <>
-          <span className="price-number">${amount}</span>
-          <span className="price-cycle">/ {yearly ? 'year' : 'month'}</span>
-        </>
-      )}
-    </div>
-  );
+  const Price = ({ amount }) => {
+    const formatted = Number(amount).toFixed(2);
+    return (
+      <div className="flex items-baseline gap-2">
+        {amount === 0 ? (
+          <span className="price-number text-lg font-semibold">Free</span>
+        ) : (
+          <>
+            <span className="price-number">${formatted}</span>
+            <span className="price-cycle">/ {yearly ? 'year' : 'month'}</span>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const downloadOptions = os === "mac"
+    ? [
+        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.3-arm64.dmg" },
+        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.3.exe" },
+      ]
+    : [
+        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.3.exe" },
+        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.3-arm64.dmg" },
+      ];
 
   return (
   <div className="min-h-screen text-zinc-900 dark:text-white">
@@ -261,21 +285,23 @@ export default function introscribeLanding() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 relative h-[30px]">
-            {/* Light mode logo */}
-            <img
-              src="/logo-b.png"
-              alt="introscribe logo"
-              className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
-              decoding="async"
-            />
-            {/* Dark mode logo layered for fade */}
-            <img
-              src="/logo-w.png"
-              alt="introscribe logo (dark)"
-              className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
-              decoding="async"
-              aria-hidden="true"
-            />
+            <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
+              {/* Light mode logo */}
+              <img
+                src="/logo-b.png"
+                alt="introscribe logo"
+                className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
+                decoding="async"
+              />
+              {/* Dark mode logo layered for fade */}
+              <img
+                src="/logo-w.png"
+                alt="introscribe logo (dark)"
+                className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
+                decoding="async"
+                aria-hidden="true"
+              />
+            </a>
           </div>
           <nav className="hidden gap-6 text-sm md:flex">
             <a className="hover:opacity-70" href="#benefits">Benefits</a>
@@ -508,18 +534,49 @@ export default function introscribeLanding() {
                   </li>
                 ))}
               </ul>
-              {p.name === 'Plus' || p.name === 'Pro' ? (
-                <a
-                  href={`https://app.introscribe.com/?plan=${p.name.toLowerCase()}${yearly ? '&interval=yearly&autologin=1' : ''}`}
-                  className="btn-muted pricing-card-cta pricing-cta-glass text-center"
-                >
-                  Get started
-                </a>
-              ) : p.cta === 'Book a Call' ? (
-                <button className="btn-gradient pricing-card-cta pricing-cta-glass">Get started</button>
-              ) : (
-                <button className="btn-muted pricing-card-cta pricing-cta-glass">Get started</button>
-              )}
+              <div className="mt-auto pt-6">
+                {(p.name.includes('Plus') || p.name.includes('Pro')) ? (
+                  <a
+                    href={`https://app.introscribe.com/?plan=${(p.slug ?? p.name).toLowerCase()}${yearly ? '&interval=yearly&autologin=1' : ''}`}
+                    className="btn-muted pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center text-center"
+                  >
+                    Get started
+                  </a>
+                ) : p.cta === 'Book a Call' ? (
+                  <button className="btn-gradient pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center">
+                    Get started
+                  </button>
+                ) : (
+                  <div className="relative" ref={freeDropdownRef}>
+                    <button
+                      type="button"
+                      className="btn-muted pricing-card-cta pricing-cta-glass w-full text-center flex items-center justify-center gap-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowFreeDownloads((open) => !open);
+                      }}
+                    >
+                      Download for free
+                      <ChevronDown className={`h-4 w-4 transition-transform ${showFreeDownloads ? 'rotate-180' : ''}`} />
+                    </button>
+                    {showFreeDownloads && (
+                      <div className="absolute left-0 right-0 mt-2 rounded-2xl border bg-white p-2 shadow-lg dark:bg-zinc-950 dark:border-white/10">
+                        {downloadOptions.map((opt) => (
+                          <a
+                            key={opt.label}
+                            href={opt.href}
+                            download={opt.file}
+                            className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-black/5 dark:text-white dark:hover:bg-white/10"
+                            onClick={() => setShowFreeDownloads(false)}
+                          >
+                            {opt.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -685,6 +742,7 @@ export default function introscribeLanding() {
           <div>
             <div className="flex items-center gap-2">
                <div className="flex items-center gap-2 relative h-[30px]">
+            <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
             {/* Light mode logo */}
             <img
               src="/logo-b.png"
@@ -700,6 +758,7 @@ export default function introscribeLanding() {
               decoding="async"
               aria-hidden="true"
             />
+            </a>
           </div>
             </div>
             <p className="mt-3 text-zinc-600 dark:text-zinc-300">
