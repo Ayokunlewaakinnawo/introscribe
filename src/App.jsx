@@ -183,7 +183,7 @@ export default function introscribeLanding() {
     {
       name: "Plus",
       priceM: 11.99,
-      priceY: 119.99, // approx monthly * 10
+      priceY: 115.10, // monthly * 12 with 20% annual discount
       bullets: [
         "Everything in Starter",
         "Unlimited AI summaries",
@@ -197,7 +197,7 @@ export default function introscribeLanding() {
     {
       name: "Pro",
       priceM: 29.99,
-      priceY: 199.99,
+      priceY: 287.90, // monthly * 12 with 20% annual discount
       bullets: [
         "All PLUS features",
         "⭐ Undetectable overlay mode",
@@ -488,7 +488,7 @@ export default function introscribeLanding() {
                 className={yearly ? 'active' : ''}
                 onClick={() => setYearly(true)}
               >
-                Yearly (save 10%)
+                Yearly (save 20%)
               </button>
             </div>
           </div>
@@ -510,7 +510,7 @@ export default function introscribeLanding() {
               </ul>
               {p.name === 'Plus' || p.name === 'Pro' ? (
                 <a
-                  href={`https://app.introscribe.com/?plan=${p.name.toLowerCase()}`}
+                  href={`https://app.introscribe.com/?plan=${p.name.toLowerCase()}${yearly ? '&interval=yearly&autologin=1' : ''}`}
                   className="btn-muted pricing-card-cta pricing-cta-glass text-center"
                 >
                   Get started
