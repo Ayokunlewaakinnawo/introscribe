@@ -1,0 +1,11 @@
+version: 1.0.3
+files:
+  - url: introscribe-1.0.3-arm64-mac.zip
+    sha512: Spio3Vq9hKFrF08iLJZPomLDMMwRqZ9Pi7Yf12AjJSu3gAFwaPLhq7vZ07fU0DXb3/bZua6wf3B6kK0FX/AUUQ==
+    size: 97803359
+  - url: introscribe-1.0.3-arm64.dmg
+    sha512: 74h34OaoAPmx8a8dKoasXmo+2V+mL4btN7CuhzNexoP9Qy3mTyeMnwkW0BAOUzcZi7H/9XfgaMSXcCeuabhUgA==
+    size: 101397258
+path: introscribe-1.0.3-arm64-mac.zip
+sha512: Spio3Vq9hKFrF08iLJZPomLDMMwRqZ9Pi7Yf12AjJSu3gAFwaPLhq7vZ07fU0DXb3/bZua6wf3B6kK0FX/AUUQ==
+releaseDate: '2025-12-13T08:22:44.586Z'
