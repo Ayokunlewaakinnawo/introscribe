@@ -779,6 +779,12 @@ export default function introscribeLanding() {
             <p className="mt-3 text-zinc-600 dark:text-zinc-300">
               Download introscribe to capture, summarize, and action meetings wherever you work.
             </p>
+            <a
+              href="mailto:support@introscribe.com"
+              className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Contact us
+            </a>
           </div>
           <div>
             <div className="font-semibold">Get the App</div>
