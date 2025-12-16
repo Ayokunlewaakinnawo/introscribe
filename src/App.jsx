@@ -11,7 +11,7 @@ const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
-  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.7.exe`;
+  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.8.exe`;
   const macInstaller = `${baseUrl}download/introscribe-1.0.3-arm64.dmg`;
   const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
   const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
@@ -352,10 +352,10 @@ export default function introscribeLanding() {
   const downloadOptions = os === "mac"
     ? [
         { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.3-arm64.dmg" },
-        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.7.exe" },
+        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.8.exe" },
       ]
     : [
-        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.7.exe" },
+        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.8.exe" },
         { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.3-arm64.dmg" },
       ];
 
@@ -472,7 +472,7 @@ export default function introscribeLanding() {
                 Get for Mac OS
               </a>
             ) : os === "windows" ? (
-              <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy" title="Download Windows installer">
+              <a href={windowsInstaller} download="introscribe-Setup-1.0.8.exe" className="download-btn glassy" title="Download Windows installer">
                 <span className="download-icon-box">
                   {/* Windows icon */}
                   <svg fill="#ffffff" width="18" height="18" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>microsoft</title> <path d="M16.742 16.742v14.253h14.253v-14.253zM1.004 16.742v14.253h14.256v-14.253zM16.742 1.004v14.256h14.253v-14.256zM1.004 1.004v14.256h14.256v-14.256z"></path> </g></svg>
@@ -481,7 +481,7 @@ export default function introscribeLanding() {
               </a>
             ) : (
               <>
-                <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy" title="Download Windows installer">
+                <a href={windowsInstaller} download="introscribe-Setup-1.0.8.exe" className="download-btn glassy" title="Download Windows installer">
                   <span className="download-icon-box">
                     {/* Windows icon */}
                     <svg width="15" height="15" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -781,7 +781,7 @@ export default function introscribeLanding() {
                     Get for Mac OS
                   </a>
                 ) : os === "windows" ? (
-                  <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy" title="Download Windows installer">
+                  <a href={windowsInstaller} download="introscribe-Setup-1.0.8.exe" className="download-btn glassy" title="Download Windows installer">
                     <span className="download-icon-box">
                       {/* Windows icon (updated 4-pane) */}
                       <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -797,7 +797,7 @@ export default function introscribeLanding() {
                   </a>
                 ) : (
                   <>
-                    <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy" title="Download Windows installer">
+                    <a href={windowsInstaller} download="introscribe-Setup-1.0.8.exe" className="download-btn glassy" title="Download Windows installer">
                       <span className="download-icon-box">
                         {/* Windows icon (updated 4-pane) */}
                         <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -920,7 +920,7 @@ export default function introscribeLanding() {
                 <DesktopRequiredCTA tone="light" align="start" fullWidth />
               ) : (
                 <div className="flex gap-3">
-                  <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
+                  <a href={windowsInstaller} download="introscribe-Setup-1.0.8.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
                     <span className="download-icon-box">
                       {/* Windows icon */}
                       <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
