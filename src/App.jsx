@@ -13,6 +13,32 @@ export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
   const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.7.exe`;
   const macInstaller = `${baseUrl}download/introscribe-1.0.3-arm64.dmg`;
+  const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
+  const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
+  const desktopLandingLink =
+    typeof window !== "undefined"
+      ? (() => {
+          try {
+            return new URL(baseUrl, window.location.origin).href;
+          } catch {
+            return `${window.location.origin}${baseUrl}`;
+          }
+        })()
+      : baseUrl;
+  const detectPlatform = () => {
+    if (typeof navigator === "undefined") return "unknown";
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    const touchPoints = typeof navigator.maxTouchPoints === "number" ? navigator.maxTouchPoints : 0;
+    const isIOS = /iP(hone|od|ad)/.test(platform) || (/Mac/.test(platform) && touchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+
+    if (isIOS) return "ios";
+    if (isAndroid) return "android";
+    if (/Mac|MacIntel|MacPPC|Mac68K/.test(platform) || /Mac OS X/.test(ua)) return "mac";
+    if (/Win/.test(platform) || /Windows/.test(ua)) return "windows";
+    return "other";
+  };
   const [dark, setDark] = useState(() => {
     // Initialize from localStorage or system preference
     try {
@@ -30,9 +56,13 @@ export default function introscribeLanding() {
   const [wordIndex, setWordIndex] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [os, setOs] = useState("unknown");
+  const [os, setOs] = useState(() => detectPlatform());
+  const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
+  const [shareStatus, setShareStatus] = useState("");
   const [showFreeDownloads, setShowFreeDownloads] = useState(false);
   const freeDropdownRef = useRef(null);
+  const isMobile = os === "ios" || os === "android";
 
   // Resize & position billing toggle indicator to match active button
   useEffect(() => {
@@ -103,18 +133,9 @@ export default function introscribeLanding() {
     return () => clearTimeout(timeout);
   }, [typedText, isDeleting, wordIndex]);
 
-  // Detect platform to show the relevant installer
+  // Detect platform to show the relevant installer (mobile-first)
   useEffect(() => {
-    if (typeof navigator === "undefined") return;
-    const ua = navigator.userAgent || "";
-    const platform = navigator.platform || "";
-    if (/Mac|MacIntel|MacPPC|Mac68K/.test(platform) || /Mac OS X/.test(ua)) {
-      setOs("mac");
-    } else if (/Win/.test(platform) || /Windows/.test(ua)) {
-      setOs("windows");
-    } else {
-      setOs("other");
-    }
+    setOs(detectPlatform());
   }, []);
 
   useEffect(() => {
@@ -126,6 +147,65 @@ export default function introscribeLanding() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
+
+  const openDesktopPrompt = () => {
+    if (!isMobile) return;
+    setShareStatus("");
+    setShowDesktopModal(true);
+  };
+
+  const handleCopyDesktopLink = async () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      setShareStatus("Copy unavailable here. Long-press and copy the link instead.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(desktopLandingLink);
+      setShareStatus("Link copied. Open it on desktop to download.");
+    } catch {
+      setShareStatus("Copy unavailable here. Long-press and copy the link instead.");
+    }
+  };
+
+  const handleEmailDesktopLink = async () => {
+    const email = shareEmail.trim();
+    if (!email) {
+      setShareStatus("Enter an email to send the desktop link.");
+      return;
+    }
+
+    setShareStatus("Sending...");
+    try {
+      const res = await fetch(mobileDownloadEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed");
+      }
+      setShareStatus("Link sent! Check your email on desktop to download.");
+    } catch (err) {
+      setShareStatus("Something went wrong. Try again or copy the link instead.");
+    }
+  };
+
+  const DesktopRequiredCTA = ({ tone = "dark", align = "center", fullWidth = false }) => (
+    <div
+      className={`desktop-cta ${tone === "light" ? "desktop-cta--light" : "desktop-cta--dark"} ${align === "start" ? "desktop-cta--left" : ""} ${fullWidth ? "desktop-cta--full" : ""}`}
+    >
+      <button type="button" className="desktop-cta-btn" onClick={openDesktopPrompt}>
+        <span className="desktop-cta__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 8V16.8C4 17.9201 4 18.4798 4.21799 18.9076C4.40973 19.2839 4.71547 19.5905 5.0918 19.7822C5.5192 20 6.07899 20 7.19691 20H16.8031C17.921 20 18.48 20 18.9074 19.7822C19.2837 19.5905 19.5905 19.2839 19.7822 18.9076C20 18.4802 20 17.921 20 16.8031V8M4 8H20M4 8L5.36518 5.61089C5.7002 5.0246 5.86768 4.73151 6.10325 4.51807C6.31184 4.32907 6.55859 4.18605 6.82617 4.09871C7.12861 4 7.46623 4 8.14258 4H15.8571C16.5334 4 16.8723 4 17.1747 4.09871C17.4423 4.18605 17.6879 4.32907 17.8965 4.51807C18.1322 4.73168 18.3002 5.02507 18.6357 5.6123L20 8M12 11V17M12 17L15 15M12 17L9 15" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </span>
+        Open on Desktop
+      </button>
+      <span className="desktop-cta-subtext">{desktopAppCopy}</span>
+    </div>
+  );
 
   // Features / Benefits / Plans / FAQs (AI meeting assistant theme)
   const features = [
@@ -281,6 +361,47 @@ export default function introscribeLanding() {
 
   return (
   <div className="min-h-screen text-zinc-900 dark:text-white">
+      {isMobile && showDesktopModal && (
+        <div className="desktop-modal" role="dialog" aria-modal="true" aria-label="Desktop required">
+          <div className="desktop-modal__backdrop" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}></div>
+          <div className="desktop-modal__card">
+            <div className="desktop-modal__header">
+              <div>
+                <p className="desktop-modal__eyebrow">Desktop required</p>
+                <h3 className="desktop-modal__title">Open on desktop to install</h3>
+                <p className="desktop-modal__lead">{desktopAppCopy}</p>
+              </div>
+              <button type="button" className="desktop-modal__close" aria-label="Close" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}>
+                ×
+              </button>
+            </div>
+            <div className="desktop-modal__body">
+              <label className="desktop-modal__label" htmlFor="share-email">Email me the download link</label>
+              <input
+                id="share-email"
+                type="email"
+                inputMode="email"
+                className="desktop-modal__input"
+                placeholder="name@email.com"
+                value={shareEmail}
+                onChange={(e) => setShareEmail(e.target.value)}
+              />
+              <button type="button" className="desktop-modal__action" onClick={handleEmailDesktopLink}>
+                Email me the download link
+              </button>
+              <div className="desktop-modal__divider">or</div>
+              <button type="button" className="desktop-modal__action desktop-modal__action--ghost" onClick={handleCopyDesktopLink}>
+                Copy link to open on desktop
+              </button>
+              {shareStatus ? (
+                <p className="desktop-modal__hint">{shareStatus}</p>
+              ) : (
+                <p className="desktop-modal__hint">We'll hold your spot - open this on desktop and the download begins.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Nav */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -336,7 +457,9 @@ export default function introscribeLanding() {
             Transcribe every word, capture every insight, <br /> and get intelligent suggestions all in real time.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
-            {os === "mac" ? (
+            {isMobile ? (
+              <DesktopRequiredCTA tone="dark" />
+            ) : os === "mac" ? (
               <a
                 href={macInstaller}
                 download="introscribe-1.0.3-arm64.dmg"
@@ -546,6 +669,8 @@ export default function introscribeLanding() {
                   <button className="btn-gradient pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center">
                     Get started
                   </button>
+                ) : isMobile ? (
+                  <DesktopRequiredCTA tone="light" align="start" fullWidth />
                 ) : (
                   <div className="relative" ref={freeDropdownRef}>
                     <button
@@ -641,7 +766,9 @@ export default function introscribeLanding() {
                 AI companion—recording, transcribing, and guiding every conversation in real time.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                {os === "mac" ? (
+                {isMobile ? (
+                  <DesktopRequiredCTA tone="dark" align="start" />
+                ) : os === "mac" ? (
                   <a
                     href={macInstaller}
                     download="introscribe-1.0.3-arm64.dmg"
@@ -788,32 +915,38 @@ export default function introscribeLanding() {
           </div>
           <div>
             <div className="font-semibold">Get the App</div>
-            <div className="mt-3 flex gap-3">
-              <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
-                <span className="download-icon-box">
-                  {/* Windows icon */}
-                  <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <g>
-                      <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                      <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                      <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                      <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                    </g>
-                  </svg>
-                </span>
-                Windows
-              </a>
-              <a
-                href={macInstaller}
-                download="introscribe-1.0.3-arm64.dmg"
-                className="download-btn download-btn--mac glassy download-btn--sm"
-                title="Download macOS installer"
-              >
-                <span className="download-icon-box">
-                  <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-                </span>
-                Mac OS
-              </a>
+            <div className="mt-3">
+              {isMobile ? (
+                <DesktopRequiredCTA tone="light" align="start" fullWidth />
+              ) : (
+                <div className="flex gap-3">
+                  <a href={windowsInstaller} download="introscribe-Setup-1.0.7.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
+                    <span className="download-icon-box">
+                      {/* Windows icon */}
+                      <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <g>
+                          <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+                          <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+                          <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+                          <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+                        </g>
+                      </svg>
+                    </span>
+                    Windows
+                  </a>
+                  <a
+                    href={macInstaller}
+                    download="introscribe-1.0.3-arm64.dmg"
+                    className="download-btn download-btn--mac glassy download-btn--sm"
+                    title="Download macOS installer"
+                  >
+                    <span className="download-icon-box">
+                      <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
+                    </span>
+                    Mac OS
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
