@@ -770,8 +770,8 @@ body {
 .dark .desktop-modal__lead { color: #e5e7eb; }
 .desktop-modal__close {
 	border: none;
-	background: #ef4444;
-	color: #ffffff;
+	background: #ef444400;
+	color: #ff0000;
 	width: 44px;
 	height: 44px;
 	border-radius: 12px;
@@ -780,16 +780,16 @@ body {
 	display: grid;
 	place-items: center;
 	outline: none;
-	box-shadow: 0 10px 24px -14px rgba(239,68,68,0.75);
+	/* box-shadow: 0 10px 24px -14px rgba(239,68,68,0.75); */
 	appearance: none;
 }
-.desktop-modal__close:hover { background: #dc2626; }
+.desktop-modal__close:hover { background: #dc262600; }
 .desktop-modal__close:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(239,68,68,0.35); }
 .dark .desktop-modal__close {
-	color: #ffffff;
-	background: #ef4444;
+	color: #ff0000;
+	background: #ef444400;
 }
-.dark .desktop-modal__close:hover { background: #dc2626; }
+.dark .desktop-modal__close:hover { background: #dc262600; }
 .desktop-modal__body {
 	margin-top: 1rem;
 	display: flex;
@@ -880,10 +880,18 @@ body {
 
 /* Touch-friendly sizing for buttons/tabs on mobile */
 @media (max-width: 768px) {
+	.billing-toggle button {
+		padding: .6rem 1.25rem;
+		font-size: .95rem;
+		border-radius: 999px;
+		min-height: 44px;
+	}	
+}
+
+@media (max-width: 768px) {
 	.download-btn,
 	.desktop-cta-btn,
-	.pricing-card-cta,
-	.billing-toggle button {
+	.pricing-card-cta {
 		min-height: 48px;
 		padding: .9rem 1.35rem;
 		border-radius: 14px;
