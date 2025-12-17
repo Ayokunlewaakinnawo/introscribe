@@ -722,14 +722,13 @@ body {
 	display: grid;
 	place-items: center;
 	padding: 1.25rem;
-	height: 100vh;
-	height: 100dvh;
+	padding-top: calc(1.25rem + env(safe-area-inset-top));
+	padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
 }
 .desktop-modal__backdrop {
 	position: fixed;
 	inset: 0;
-	height: 100vh;
-	height: 100dvh;
+	bottom: calc(0px - env(safe-area-inset-bottom));
 	background: rgba(5,8,15,0.62);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
