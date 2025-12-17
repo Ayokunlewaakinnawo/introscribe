@@ -722,10 +722,14 @@ body {
 	display: grid;
 	place-items: center;
 	padding: 1.25rem;
+	height: 100vh;
+	height: 100dvh;
 }
 .desktop-modal__backdrop {
-	position: absolute;
+	position: fixed;
 	inset: 0;
+	height: 100vh;
+	height: 100dvh;
 	background: rgba(5,8,15,0.62);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
@@ -769,27 +773,31 @@ body {
 }
 .dark .desktop-modal__lead { color: #e5e7eb; }
 .desktop-modal__close {
-	border: none;
-	background: #ef444400;
-	color: #ff0000;
-	width: 44px;
-	height: 44px;
+	border: 1px solid rgba(239,68,68,0.25);
+	background: rgba(239,68,68,0.08);
+	color: #b91c1c;
+	width: auto;
+	height: auto;
+	padding: .6rem .95rem;
 	border-radius: 12px;
-	font-size: 1.35rem;
+	font-size: .95rem;
+	font-weight: 700;
 	line-height: 1;
-	display: grid;
-	place-items: center;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	outline: none;
 	/* box-shadow: 0 10px 24px -14px rgba(239,68,68,0.75); */
 	appearance: none;
 }
-.desktop-modal__close:hover { background: #dc262600; }
+.desktop-modal__close:hover { background: rgba(239,68,68,0.14); }
 .desktop-modal__close:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(239,68,68,0.35); }
 .dark .desktop-modal__close {
-	color: #ff0000;
-	background: #ef444400;
+	color: #fca5a5;
+	background: rgba(239,68,68,0.15);
+	border-color: rgba(239,68,68,0.35);
 }
-.dark .desktop-modal__close:hover { background: #dc262600; }
+.dark .desktop-modal__close:hover { background: rgba(239,68,68,0.22); }
 .desktop-modal__body {
 	margin-top: 1rem;
 	display: flex;

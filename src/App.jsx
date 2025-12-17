@@ -372,7 +372,7 @@ export default function introscribeLanding() {
                 <p className="desktop-modal__lead">{desktopAppCopy}</p>
               </div>
               <button type="button" className="desktop-modal__close" aria-label="Close" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}>
-                ×
+                Close
               </button>
             </div>
             <div className="desktop-modal__body">
