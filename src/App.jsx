@@ -207,6 +207,173 @@ export default function introscribeLanding() {
     </div>
   );
 
+  const normalizePath = (value) => {
+    const normalized = value.replace(/\/$/, "");
+    return normalized === "" ? "/" : normalized;
+  };
+
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const showNotFound = normalizePath(currentPath) !== normalizePath(baseUrl);
+
+  const Header = () => (
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-2 relative h-[30px]">
+          <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
+            <img
+              src="/logo-b.png"
+              alt="introscribe logo"
+              className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
+              decoding="async"
+            />
+            <img
+              src="/logo-w.png"
+              alt="introscribe logo (dark)"
+              className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
+              decoding="async"
+              aria-hidden="true"
+            />
+          </a>
+        </div>
+        <nav className="hidden gap-6 text-sm md:flex">
+          <a className="hover:opacity-70" href="#benefits">
+            Benefits
+          </a>
+          <a className="hover:opacity-70" href="#how">
+            How it Works
+          </a>
+          <a className="hover:opacity-70" href="#pricing">
+            Pricing
+          </a>
+          <a className="hover:opacity-70" href="#faq">
+            FAQ
+          </a>
+        </nav>
+        <div className="flex items-center">
+          <button
+            aria-label="Toggle theme"
+            onClick={() => setDark((d) => !d)}
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border hover:bg-black/5 dark:hover:bg-white/10"
+          >
+            <Sun className={`h-4 w-4 transition-transform duration-300 ${dark ? "scale-0 rotate-90" : "scale-100 rotate-0"}`} />
+            <Moon className={`absolute h-4 w-4 transition-transform duration-300 ${dark ? "scale-100 rotate-0" : "scale-0 -rotate-90"}`} />
+            <span className="sr-only">Toggle dark mode</span>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+
+  const Footer = () => (
+    <footer className="mt-16 border-t border-black/5 bg-zinc-50 py-10 text-sm dark:border-white/10 dark:bg-zinc-900">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 relative h-[30px]">
+              <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
+                <img
+                  src="/logo-b.png"
+                  alt="introscribe logo"
+                  className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
+                  decoding="async"
+                />
+                <img
+                  src="/logo-w.png"
+                  alt="introscribe logo (dark)"
+                  className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
+                  decoding="async"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
+          </div>
+          <p className="mt-3 text-zinc-600 dark:text-zinc-300">
+            introscribe is an AI meeting companion—capture, summarize, and action every conversation.
+          </p>
+        </div>
+        <div>
+          <div className="font-semibold">Benefits</div>
+          <ul className="mt-3 space-y-2 text-zinc-600 dark:text-zinc-300">
+            <li>
+              <a href="#benefits" className="hover:underline">
+                Overview
+              </a>
+            </li>
+            <li>
+              <a href="#how" className="hover:underline">
+                How it Works
+              </a>
+            </li>
+            <li>
+              <a href="#pricing" className="hover:underline">
+                Pricing
+              </a>
+            </li>
+            <li>
+              <a href="#faq" className="hover:underline">
+                FAQ
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div className="font-semibold">Capture More, Type Less</div>
+          <p className="mt-3 text-zinc-600 dark:text-zinc-300">
+            Download introscribe to capture, summarize, and action meetings wherever you work.
+          </p>
+          <a
+            href="mailto:support@introscribe.com"
+            className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Contact us
+          </a>
+        </div>
+        <div>
+          <div className="font-semibold">Get the App</div>
+          <div className="mt-3">
+            {isMobile ? (
+              <DesktopRequiredCTA tone="light" align="start" fullWidth />
+            ) : (
+              <div className="flex gap-3">
+                <a href={windowsInstaller} download="introscribe-Setup-1.0.9.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
+                  <span className="download-icon-box">
+                    <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <g>
+                        <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+                        <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+                        <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+                        <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+                      </g>
+                    </svg>
+                  </span>
+                  Windows
+                </a>
+                <a
+                  href={macInstaller}
+                  download="introscribe-1.0.3-arm64.dmg"
+                  className="download-btn download-btn--mac glassy download-btn--sm"
+                  title="Download macOS installer"
+                >
+                  <span className="download-icon-box">
+                    <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false">
+                      <g>
+                        <path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path>
+                      </g>
+                    </svg>
+                  </span>
+                  Mac OS
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="mx-auto mt-10 max-w-6xl px-4 text-xs text-zinc-500 dark:text-zinc-400">
+        © {new Date().getFullYear()} introscribe. All rights reserved.
+      </div>
+    </footer>
+  );
+
   // Features / Benefits / Plans / FAQs (AI meeting assistant theme)
   const features = [
     {
@@ -402,49 +569,30 @@ export default function introscribeLanding() {
           </div>
         </div>
       )}
-      {/* Nav */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2 relative h-[30px]">
-            <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
-              {/* Light mode logo */}
-              <img
-                src="/logo-b.png"
-                alt="introscribe logo"
-                className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
-                decoding="async"
-              />
-              {/* Dark mode logo layered for fade */}
-              <img
-                src="/logo-w.png"
-                alt="introscribe logo (dark)"
-                className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
-                decoding="async"
-                aria-hidden="true"
-              />
-            </a>
-          </div>
-          <nav className="hidden gap-6 text-sm md:flex">
-            <a className="hover:opacity-70" href="#benefits">Benefits</a>
-            <a className="hover:opacity-70" href="#how">How it Works</a>
-            <a className="hover:opacity-70" href="#pricing">Pricing</a>
-            <a className="hover:opacity-70" href="#faq">FAQ</a>
-          </nav>
-          <div className="flex items-center">
-            <button
-              aria-label="Toggle theme"
-              onClick={() => setDark(d => !d)}
-              className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border hover:bg-black/5 dark:hover:bg-white/10"
-            >
-              <Sun className={`h-4 w-4 transition-transform duration-300 ${dark ? 'scale-0 rotate-90' : 'scale-100 rotate-0'}`} />
-              <Moon className={`absolute h-4 w-4 transition-transform duration-300 ${dark ? 'scale-100 rotate-0' : 'scale-0 -rotate-90'}`} />
-              <span className="sr-only">Toggle dark mode</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      {/* Hero */}
+      {showNotFound ? (
+        <main className="relative flex min-h-[60vh] flex-1 flex-col items-center justify-center gap-4 px-4 py-28 text-center">
+          <p className="text-xs uppercase tracking-[0.6em] text-zinc-500 dark:text-zinc-400">404</p>
+          <h1 className="text-4xl font-semibold text-zinc-900 dark:text-white">Page not found</h1>
+          <p className="max-w-2xl text-base text-zinc-600 dark:text-zinc-300">
+            The page you were looking for either moved or never existed. Head back home to keep exploring the AI companion.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.location.assign(baseUrl);
+              }
+            }}
+            className="mt-6 inline-flex items-center justify-center rounded-[14px] border border-zinc-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.28em] text-zinc-900 transition hover:border-zinc-700 hover:bg-zinc-900 hover:text-white dark:border-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            Go back home
+          </button>
+        </main>
+      ) : (
+        <>
+          {/* Hero */}
       <section className="landing-bg landing-bg-animate w-full px-4 pb-16 pt-14 md:pt-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center text-white hero-text-glow">
@@ -862,98 +1010,9 @@ export default function introscribeLanding() {
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="mt-16 border-t border-black/5 bg-zinc-50 py-10 text-sm dark:border-white/10 dark:bg-zinc-900">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-4">
-          <div>
-            <div className="flex items-center gap-2">
-               <div className="flex items-center gap-2 relative h-[30px]">
-            <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
-            {/* Light mode logo */}
-            <img
-              src="/logo-b.png"
-              alt="introscribe logo"
-              className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
-              decoding="async"
-            />
-            {/* Dark mode logo layered for fade */}
-            <img
-              src="/logo-w.png"
-              alt="introscribe logo (dark)"
-              className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
-              decoding="async"
-              aria-hidden="true"
-            />
-            </a>
-          </div>
-            </div>
-            <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-              introscribe is an AI meeting companion—capture, summarize, and action every conversation.
-            </p>
-          </div>
-          <div>
-            <div className="font-semibold">Benefits</div>
-            <ul className="mt-3 space-y-2 text-zinc-600 dark:text-zinc-300">
-              <li><a href="#benefits" className="hover:underline">Overview</a></li>
-              <li><a href="#how" className="hover:underline">How it Works</a></li>
-              <li><a href="#pricing" className="hover:underline">Pricing</a></li>
-              <li><a href="#faq" className="hover:underline">FAQ</a></li>
-            </ul>
-          </div>
-          <div>
-            <div className="font-semibold">Capture More, Type Less</div>
-            <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-              Download introscribe to capture, summarize, and action meetings wherever you work.
-            </p>
-            <a
-              href="mailto:support@introscribe.com"
-              className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
-            >
-              Contact us
-            </a>
-          </div>
-          <div>
-            <div className="font-semibold">Get the App</div>
-            <div className="mt-3">
-              {isMobile ? (
-                <DesktopRequiredCTA tone="light" align="start" fullWidth />
-              ) : (
-                <div className="flex gap-3">
-                  <a href={windowsInstaller} download="introscribe-Setup-1.0.9.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
-                    <span className="download-icon-box">
-                      {/* Windows icon */}
-                      <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                        <g>
-                          <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                          <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                          <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                          <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                        </g>
-                      </svg>
-                    </span>
-                    Windows
-                  </a>
-                  <a
-                    href={macInstaller}
-                    download="introscribe-1.0.3-arm64.dmg"
-                    className="download-btn download-btn--mac glassy download-btn--sm"
-                    title="Download macOS installer"
-                  >
-                    <span className="download-icon-box">
-                      <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-                    </span>
-                    Mac OS
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto mt-10 max-w-6xl px-4 text-xs text-zinc-500 dark:text-zinc-400">
-          © {new Date().getFullYear()} introscribe. All rights reserved.
-        </div>
-      </footer>
+        </>
+      )}
+      <Footer />
     </div>
   );
 }
