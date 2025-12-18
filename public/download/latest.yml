@@ -1,8 +1,8 @@
-version: 1.0.10
+version: 1.0.11
 files:
-  - url: introscribe-Setup-1.0.10.exe
-    sha512: JiE7bmSrw/mha2fQY9P32DDF8t76r1ZWfX3RwokLpebqs933V1j8qcpSotlBiOn/GqqPYU43K+vAhXwM27ty8Q==
-    size: 81092171
-path: introscribe-Setup-1.0.10.exe
-sha512: JiE7bmSrw/mha2fQY9P32DDF8t76r1ZWfX3RwokLpebqs933V1j8qcpSotlBiOn/GqqPYU43K+vAhXwM27ty8Q==
-releaseDate: '2025-12-18T21:59:14.153Z'
+  - url: introscribe-Setup-1.0.11.exe
+    sha512: 5PiTcK29yaLQed4b0VZrS1wi59vMKj6Qg8dc8mRq56SExb2+jR9kpxf5d3Td2U3oXSW8qmeOLTr0xG2x60cLfw==
+    size: 81102885
+path: introscribe-Setup-1.0.11.exe
+sha512: 5PiTcK29yaLQed4b0VZrS1wi59vMKj6Qg8dc8mRq56SExb2+jR9kpxf5d3Td2U3oXSW8qmeOLTr0xG2x60cLfw==
+releaseDate: '2025-12-18T22:44:28.215Z'
