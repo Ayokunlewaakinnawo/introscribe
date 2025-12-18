@@ -6,6 +6,53 @@ import { useEffect, useRef, useState } from "react";
 
 const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
 
+const HeroTyped = React.memo(function HeroTyped({ words }) {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [typedText, setTypedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (!words.length) {
+      return;
+    }
+
+    const currentWord = words[wordIndex];
+    let delay = isDeleting ? 65 : 110;
+
+    if (!isDeleting && typedText === currentWord) {
+      delay = 1200;
+    } else if (isDeleting && typedText === "") {
+      delay = 350;
+    }
+
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (typedText.length < currentWord.length) {
+          setTypedText(currentWord.slice(0, typedText.length + 1));
+        } else {
+          setIsDeleting(true);
+        }
+      } else {
+        if (typedText.length > 0) {
+          setTypedText(currentWord.slice(0, typedText.length - 1));
+        } else {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
+        }
+      }
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, wordIndex, words]);
+
+  return (
+    <span className="hero-typed">
+      for {typedText}
+      <span className="typing-caret" aria-hidden="true"></span>
+    </span>
+  );
+});
+
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
 
@@ -53,9 +100,6 @@ export default function introscribeLanding() {
   const monthlyBtnRef = useRef(null);
   const yearlyBtnRef = useRef(null);
   const indicatorRef = useRef(null);
-  const [wordIndex, setWordIndex] = useState(0);
-  const [typedText, setTypedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
   const [os, setOs] = useState(() => detectPlatform());
   const [showDesktopModal, setShowDesktopModal] = useState(false);
   const [shareEmail, setShareEmail] = useState("");
@@ -102,37 +146,6 @@ export default function introscribeLanding() {
       try { localStorage.setItem('theme', 'light'); } catch {}
     }
   }, [dark]);
-  // Typed hero headline animation
-  useEffect(() => {
-    const currentWord = HERO_WORDS[wordIndex];
-    let delay = isDeleting ? 65 : 110;
-
-    if (!isDeleting && typedText === currentWord) {
-      delay = 1200; // pause after finishing a word
-    } else if (isDeleting && typedText === "") {
-      delay = 350; // slight pause before typing the next word
-    }
-
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (typedText.length < currentWord.length) {
-          setTypedText(currentWord.slice(0, typedText.length + 1));
-        } else {
-          setIsDeleting(true);
-        }
-      } else {
-        if (typedText.length > 0) {
-          setTypedText(currentWord.slice(0, typedText.length - 1));
-        } else {
-          setIsDeleting(false);
-          setWordIndex((wordIndex + 1) % HERO_WORDS.length);
-        }
-      }
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [typedText, isDeleting, wordIndex]);
-
   // Detect platform to show the relevant installer (mobile-first)
   useEffect(() => {
     setOs(detectPlatform());
@@ -595,7 +608,7 @@ export default function introscribeLanding() {
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl hero-title-animate">
            Your Real-Time AI Assistant
             <br />
-            <span className="hero-typed">for {typedText}<span className="typing-caret" aria-hidden="true"></span></span>
+            <HeroTyped words={HERO_WORDS} />
           </h1>
           <p className="mt-4 text-pretty text-white/80 dark:text-zinc-300 hero-lead hero-cta-animate">
             Transcribe every word, capture every insight, <br /> and get intelligent suggestions all in real time.
@@ -720,7 +733,7 @@ export default function introscribeLanding() {
                   <img
                     src="/setting-dark.png"
                     alt="Contextual answers feature preview (dark)"
-                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 opacity-0 dark:opacity-100"
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 opacity-0 dark:opacity-100 pointer-events-none"
                     loading="lazy"
                     decoding="async"
                     aria-hidden="true"
@@ -740,7 +753,7 @@ export default function introscribeLanding() {
                   <img
                     src="/private-dark.png"
                     alt="Private feature preview (dark)"
-                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 opacity-0 dark:opacity-100"
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 opacity-0 dark:opacity-100 pointer-events-none"
                     loading="lazy"
                     decoding="async"
                     aria-hidden="true"
@@ -895,12 +908,12 @@ export default function introscribeLanding() {
           {/* Background layers for smooth fade between light and dark */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-100 dark:opacity-0"
+            className="absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-100 dark:opacity-0 pointer-events-none"
             style={{ backgroundImage: 'url(/foot.png)' }}
           ></div>
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0 dark:opacity-100"
+            className="absolute inset-0 bg-cover bg-center transition-opacity duration-700 opacity-0 dark:opacity-100 pointer-events-none"
             style={{ backgroundImage: 'url(/foot-dark.png)' }}
           ></div>
           <div className="relative grid h-full gap-6 md:grid-cols-2">
