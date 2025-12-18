@@ -236,24 +236,16 @@ export default function introscribeLanding() {
           </a>
         </div>
         <nav className="hidden gap-6 text-sm md:flex">
-          <a className="hover:opacity-70" href="#benefits">
-            Benefits
-          </a>
-          <a className="hover:opacity-70" href="#how">
-            How it Works
-          </a>
-          <a className="hover:opacity-70" href="#pricing">
-            Pricing
-          </a>
-          <a className="hover:opacity-70" href="#faq">
-            FAQ
-          </a>
+          <a href="#benefits">Benefits</a>
+          <a href="#how">How it Works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
         </nav>
         <div className="flex items-center">
           <button
             aria-label="Toggle theme"
             onClick={() => setDark((d) => !d)}
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border hover:bg-black/5 dark:hover:bg-white/10"
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border"
           >
             <Sun className={`h-4 w-4 transition-transform duration-300 ${dark ? "scale-0 rotate-90" : "scale-100 rotate-0"}`} />
             <Moon className={`absolute h-4 w-4 transition-transform duration-300 ${dark ? "scale-100 rotate-0" : "scale-0 -rotate-90"}`} />
@@ -295,22 +287,22 @@ export default function introscribeLanding() {
           <div className="font-semibold">Benefits</div>
           <ul className="mt-3 space-y-2 text-zinc-600 dark:text-zinc-300">
             <li>
-              <a href="#benefits" className="hover:underline">
+              <a href="#benefits">
                 Overview
               </a>
             </li>
             <li>
-              <a href="#how" className="hover:underline">
+              <a href="#how">
                 How it Works
               </a>
             </li>
             <li>
-              <a href="#pricing" className="hover:underline">
+              <a href="#pricing">
                 Pricing
               </a>
             </li>
             <li>
-              <a href="#faq" className="hover:underline">
+              <a href="#faq">
                 FAQ
               </a>
             </li>
@@ -323,7 +315,7 @@ export default function introscribeLanding() {
           </p>
           <a
             href="mailto:support@introscribe.com"
-            className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="mt-3 inline-flex text-sm font-medium text-blue-600 dark:text-blue-400"
           >
             Contact us
           </a>
@@ -533,14 +525,11 @@ export default function introscribeLanding() {
           <div className="desktop-modal__backdrop" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}></div>
           <div className="desktop-modal__card">
             <div className="desktop-modal__header">
-              <div>
-                <p className="desktop-modal__eyebrow">Desktop required</p>
-                <h3 className="desktop-modal__title">Open on desktop to install</h3>
-                <p className="desktop-modal__lead">{desktopAppCopy}</p>
-              </div>
-              <button type="button" className="desktop-modal__close" aria-label="Close" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}>
-                Close
-              </button>
+          <div>
+            <p className="desktop-modal__eyebrow">Desktop required</p>
+            <h3 className="desktop-modal__title">Open on desktop to install</h3>
+            <p className="desktop-modal__lead">{desktopAppCopy}</p>
+          </div>
             </div>
             <div className="desktop-modal__body">
               <label className="desktop-modal__label" htmlFor="share-email">Email me the download link</label>
@@ -559,6 +548,13 @@ export default function introscribeLanding() {
               <div className="desktop-modal__divider">or</div>
               <button type="button" className="desktop-modal__action desktop-modal__action--ghost" onClick={handleCopyDesktopLink}>
                 Copy link to open on desktop
+              </button>
+              <button
+                type="button"
+                className="desktop-modal__action desktop-modal__action--ghost desktop-modal__close"
+                onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}
+              >
+                Close
               </button>
               {shareStatus ? (
                 <p className="desktop-modal__hint">{shareStatus}</p>
@@ -585,7 +581,7 @@ export default function introscribeLanding() {
                 window.location.assign(baseUrl);
               }
             }}
-            className="mt-6 inline-flex items-center justify-center rounded-[14px] border border-zinc-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.28em] text-zinc-900 transition hover:border-zinc-700 hover:bg-zinc-900 hover:text-white dark:border-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="mt-6 inline-flex items-center justify-center rounded-[14px] border border-zinc-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.28em] text-zinc-900 transition dark:border-white dark:bg-white dark:text-zinc-900"
           >
             Go back home
           </button>
@@ -686,7 +682,7 @@ export default function introscribeLanding() {
               </div>
               <h3 className="mt-4 font-semibold tracking-tight text-zinc-900 dark:text-white">{b.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">{b.desc}</p>
-              <button className="mt-4 inline-flex items-center text-sm font-medium text-zinc-900 dark:text-white underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+              <button className="mt-4 inline-flex items-center text-sm font-medium text-zinc-900 dark:text-white underline underline-offset-4 decoration-white/30">
                 Learn more
               </button>
             </div>
@@ -838,8 +834,8 @@ export default function introscribeLanding() {
                           <a
                             key={opt.label}
                             href={opt.href}
-                            download={opt.file}
-                            className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-black/5 dark:text-white dark:hover:bg-white/10"
+                          download={opt.file}
+                            className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 dark:text-white"
                             onClick={() => setShowFreeDownloads(false)}
                           >
                             {opt.label}
