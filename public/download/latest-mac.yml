@@ -1,11 +1,11 @@
-version: 1.0.19
+version: 1.0.20
 files:
-  - url: introscribe-1.0.19-arm64-mac.zip
-    sha512: Q9rtnmLbOn3M18eKi8jpmkABgbJSFyde9EaubRGqTR3mUlqeKLbcM8+Olf2agZ0L2G1iCeQuUb+0ZQKAVfIdLQ==
-    size: 97037943
-  - url: introscribe-1.0.19-arm64.dmg
-    sha512: HcZ5NyQJvzQHL9LqJeyxjwzeG+3bJORPTU4BWRRKGWEhge+McPXdBhPsuCuQCFk/oXSbgm8x4DEaQjqjEbq6XA==
-    size: 100942807
-path: introscribe-1.0.19-arm64-mac.zip
-sha512: Q9rtnmLbOn3M18eKi8jpmkABgbJSFyde9EaubRGqTR3mUlqeKLbcM8+Olf2agZ0L2G1iCeQuUb+0ZQKAVfIdLQ==
-releaseDate: '2026-01-07T17:57:49.702Z'
+  - url: introscribe-1.0.20-arm64-mac.zip
+    sha512: AG0VginLcZxKrpvKA9DNAjBegH+nz4+mD23Cwf8K9bNt4CkFGJV5q9OiFsDysGkh/fUD04MFgk+iMDY0a4IEsA==
+    size: 97038841
+  - url: introscribe-1.0.20-arm64.dmg
+    sha512: zQvRXHMbX8uhp+6J9Jcvq4ft8DCDaGOYgKGNauGxcvkZFw7osn5F9JSSgpZKztDbDnXz7yISrSgWBtcnheutbQ==
+    size: 100947833
+path: introscribe-1.0.20-arm64-mac.zip
+sha512: AG0VginLcZxKrpvKA9DNAjBegH+nz4+mD23Cwf8K9bNt4CkFGJV5q9OiFsDysGkh/fUD04MFgk+iMDY0a4IEsA==
+releaseDate: '2026-01-11T05:29:42.296Z'
