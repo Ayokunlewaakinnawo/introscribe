@@ -3,7 +3,7 @@ files:
   - url: introscribe-1.0.22-arm64-mac.zip
     sha512: rZ/MCyE15BhhuT7oaAjTnnNcIfXPiVC+pqIZrdMBrS4ADFU1oFgXFqp04fC0DeBzzNNhxomYK8JvXdQgluUdAQ==
     size: 97038957
-  - url: introscribe-1.0.22-arm64.dmg
+  - url: introscribe-1.0.22-arm64.pkg
     sha512: HLf9VnWgT0MLEjOAL1Md+xLLa610yaDqzzHaxZ0xgI6OhJLf4FS7vE9zW/thsm+XGejp3THEewgv2+kq+z9TDw==
     size: 100947388
 path: introscribe-1.0.22-arm64-mac.zip
