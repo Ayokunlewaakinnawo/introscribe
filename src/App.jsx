@@ -59,7 +59,7 @@ const HeroTyped = React.memo(function HeroTyped({ words }) {
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
   const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.21.exe`;
-  const macInstaller = `${baseUrl}download/introscribe-1.0.21-arm64.dmg`;
+  const macInstaller = `${baseUrl}download/introscribe-1.0.22-arm64.dmg`;
   const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
   const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
   const desktopLandingLink =
@@ -355,7 +355,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.21-arm64.dmg"
+                  download="introscribe-1.0.22-arm64.dmg"
                   className="download-btn download-btn--mac glassy download-btn--sm"
                   title="Download macOS installer"
                 >
@@ -523,12 +523,12 @@ export default function introscribeLanding() {
 
   const downloadOptions = os === "mac"
     ? [
-        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.21-arm64.dmg" },
+        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.22-arm64.dmg" },
         { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.21.exe" },
       ]
     : [
         { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.21.exe" },
-        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.21-arm64.dmg" },
+        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.22-arm64.dmg" },
       ];
 
   return (
@@ -619,7 +619,7 @@ export default function introscribeLanding() {
             ) : os === "mac" ? (
               <a
                 href={macInstaller}
-                download="introscribe-1.0.21-arm64.dmg"
+                download="introscribe-1.0.22-arm64.dmg"
                 className="download-btn download-btn--mac glassy"
                 title="Download macOS installer"
               >
@@ -654,7 +654,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.21-arm64.dmg"
+                  download="introscribe-1.0.22-arm64.dmg"
                   className="download-btn download-btn--mac glassy"
                   title="Download macOS installer"
                 >
@@ -928,7 +928,7 @@ export default function introscribeLanding() {
                 ) : os === "mac" ? (
                   <a
                     href={macInstaller}
-                    download="introscribe-1.0.21-arm64.dmg"
+                    download="introscribe-1.0.22-arm64.dmg"
                     className="download-btn download-btn--mac glassy"
                     title="Download macOS installer"
                   >
@@ -970,7 +970,7 @@ export default function introscribeLanding() {
                     </a>
                     <a
                       href={macInstaller}
-                      download="introscribe-1.0.21-arm64.dmg"
+                      download="introscribe-1.0.22-arm64.dmg"
                       className="download-btn download-btn--mac glassy"
                       title="Download macOS installer"
                     >
