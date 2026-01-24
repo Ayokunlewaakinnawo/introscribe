@@ -449,7 +449,7 @@ export default function introscribeLanding() {
       name: "Plus Plan",
       slug: "plus",
       priceM: 11.99,
-      priceY: 115.10, // monthly * 12 with 20% annual discount
+      priceY: 9.59, // monthly * 0.8 with 20% annual discount (billed yearly)
       bullets: [
         "Unlimited AI responses",
         "Unlimited meeting notetaking",
@@ -463,8 +463,8 @@ export default function introscribeLanding() {
     {
       name: "Pro Plan",
       slug: "pro",
-      priceM: 29.99,
-      priceY: 287.90, // monthly * 12 with 20% annual discount
+      priceM: 20.99,
+      priceY: 16.79, // monthly * 0.8 with 20% annual discount (billed yearly)
       bullets: [
         "Everything included in the Plus plan",
         "Completely hidden from meeting screen-sharing software",
@@ -514,7 +514,7 @@ export default function introscribeLanding() {
         ) : (
           <>
             <span className="price-number">${formatted}</span>
-            <span className="price-cycle">/ {yearly ? 'year' : 'month'}</span>
+            <span className="price-cycle">/ month</span>
           </>
         )}
       </div>
