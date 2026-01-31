@@ -1,11 +1,11 @@
-version: 1.0.28
+version: 1.0.29
 files:
-  - url: introscribe-1.0.28-arm64-mac.zip
-    sha512: Z2xYhgSf7erRKcUX9A0ZbCzb3Bmw4I3Wg7bR2GovhteG7XmVOB/hFTfZE1iPAstqVTw19vuSdmTWhuIPwbte6g==
-    size: 97048856
-  - url: introscribe-1.0.28-arm64.dmg
-    sha512: Hc5yA6RYBfrN1Vev192ylO9px284n1V/pR6bxCayE/bV9abmGqAOfINqwmCHlyqhAT+W/QR2CfDVs2ILiJgIxg==
-    size: 100945387
-path: introscribe-1.0.28-arm64-mac.zip
-sha512: Z2xYhgSf7erRKcUX9A0ZbCzb3Bmw4I3Wg7bR2GovhteG7XmVOB/hFTfZE1iPAstqVTw19vuSdmTWhuIPwbte6g==
-releaseDate: '2026-01-25T18:44:10.843Z'
+  - url: introscribe-1.0.29-arm64-mac.zip
+    sha512: d/fmDXMs4rAMbu/JsboHPBf9Z648iMmknl7q0poA7t4rvPTNCW5B1m1WoXOSp2rsthiDkOCxS47mBGl8vYLSXg==
+    size: 97049121
+  - url: introscribe-1.0.29-arm64.dmg
+    sha512: DW9uSC1O+KUQNJMHIMM+c9l8IGKlH2qCb9Nbq9yu2aZC4yTpHAemScWyMj5eOpop4S4GeHw6JKd+C4JB74T7Aw==
+    size: 100944530
+path: introscribe-1.0.29-arm64-mac.zip
+sha512: d/fmDXMs4rAMbu/JsboHPBf9Z648iMmknl7q0poA7t4rvPTNCW5B1m1WoXOSp2rsthiDkOCxS47mBGl8vYLSXg==
+releaseDate: '2026-01-31T19:08:20.502Z'
