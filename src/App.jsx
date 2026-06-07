@@ -3,8 +3,33 @@ import React from "react";
 
 import { Brain, Check, ChevronDown, Clock10, HatGlasses, MessageCircle, Mic, Moon, Shield, Sun, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { SITE_URL, homeSeo, seoPages, seoPagesBySlug } from "./seoPages";
 
 const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
+
+const upsertMeta = (selector, createAttrs, valueAttr, value) => {
+  if (typeof document === "undefined") return;
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    Object.entries(createAttrs).forEach(([key, attrValue]) => {
+      element.setAttribute(key, attrValue);
+    });
+    document.head.appendChild(element);
+  }
+  element.setAttribute(valueAttr, value);
+};
+
+const upsertCanonical = (href) => {
+  if (typeof document === "undefined") return;
+  let element = document.head.querySelector('link[rel="canonical"]');
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", "canonical");
+    document.head.appendChild(element);
+  }
+  element.setAttribute("href", href);
+};
 
 const HeroTyped = React.memo(function HeroTyped({ words }) {
   const [wordIndex, setWordIndex] = useState(0);
@@ -226,7 +251,30 @@ export default function introscribeLanding() {
   };
 
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
-  const showNotFound = normalizePath(currentPath) !== normalizePath(baseUrl);
+  const normalizedBase = normalizePath(baseUrl);
+  const normalizedPath = normalizePath(currentPath);
+  const currentSlug = (() => {
+    if (normalizedPath === normalizedBase) return "";
+    if (normalizedBase !== "/" && normalizedPath.startsWith(`${normalizedBase}/`)) {
+      return normalizedPath.slice(normalizedBase.length + 1);
+    }
+    return normalizedPath.replace(/^\//, "");
+  })();
+  const activeSeoPage = currentSlug ? seoPagesBySlug[currentSlug] : null;
+  const showNotFound = Boolean(currentSlug && !activeSeoPage);
+  const pageSeo = activeSeoPage ?? homeSeo;
+  const canonicalUrl = `${SITE_URL}${pageSeo.canonicalPath === "/" ? "/" : pageSeo.canonicalPath}`;
+
+  useEffect(() => {
+    document.title = pageSeo.title;
+    upsertMeta('meta[name="description"]', { name: "description" }, "content", pageSeo.description);
+    upsertMeta('meta[property="og:title"]', { property: "og:title" }, "content", pageSeo.title);
+    upsertMeta('meta[property="og:description"]', { property: "og:description" }, "content", pageSeo.description);
+    upsertMeta('meta[property="og:url"]', { property: "og:url" }, "content", canonicalUrl);
+    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, "content", pageSeo.title);
+    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, "content", pageSeo.description);
+    upsertCanonical(canonicalUrl);
+  }, [canonicalUrl, pageSeo.description, pageSeo.title]);
 
   const Header = () => (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-white/30 backdrop-blur-md dark:bg-zinc-950/30 dark:border-white/10">
@@ -249,10 +297,10 @@ export default function introscribeLanding() {
           </a>
         </div>
         <nav className="hidden gap-6 text-sm md:flex">
-          <a href="#benefits">Benefits</a>
-          <a href="#how">How it Works</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
+          <a href={`${baseUrl}#benefits`}>Benefits</a>
+          <a href={`${baseUrl}#how`}>How it Works</a>
+          <a href={`${baseUrl}#pricing`}>Pricing</a>
+          <a href={`${baseUrl}#faq`}>FAQ</a>
         </nav>
         <div className="flex items-center">
           <button
@@ -300,22 +348,22 @@ export default function introscribeLanding() {
           <div className="font-semibold">Benefits</div>
           <ul className="mt-3 space-y-2 text-zinc-600 dark:text-zinc-300">
             <li>
-              <a href="#benefits">
+              <a href={`${baseUrl}#benefits`}>
                 Overview
               </a>
             </li>
             <li>
-              <a href="#how">
+              <a href={`${baseUrl}#how`}>
                 How it Works
               </a>
             </li>
             <li>
-              <a href="#pricing">
+              <a href={`${baseUrl}#pricing`}>
                 Pricing
               </a>
             </li>
             <li>
-              <a href="#faq">
+              <a href={`${baseUrl}#faq`}>
                 FAQ
               </a>
             </li>
@@ -372,6 +420,13 @@ export default function introscribeLanding() {
             )}
           </div>
         </div>
+      </div>
+      <div className="mx-auto mt-10 flex max-w-6xl flex-wrap gap-x-5 gap-y-2 px-4 text-xs text-zinc-500 dark:text-zinc-400">
+        {seoPages.slice(0, 10).map((page) => (
+          <a key={page.slug} href={`${baseUrl}${page.slug}`}>
+            {page.h1}
+          </a>
+        ))}
       </div>
       <div className="mx-auto mt-10 max-w-6xl px-4 text-xs text-zinc-500 dark:text-zinc-400">
         © {new Date().getFullYear()} introscribe. All rights reserved.
@@ -531,6 +586,91 @@ export default function introscribeLanding() {
         { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.29-arm64.pkg" },
       ];
 
+  const SeoContentPage = ({ page }) => (
+    <main className="seo-page">
+      <section className="seo-hero">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="max-w-3xl">
+            <p className="seo-eyebrow">Introscribe AI Assistant</p>
+            <h1>{page.h1}</h1>
+            <p className="seo-intro">{page.intro}</p>
+            <div className="seo-actions">
+              {isMobile ? (
+                <DesktopRequiredCTA tone="light" align="start" />
+              ) : (
+                downloadOptions.map((opt) => (
+                  <a
+                    key={opt.label}
+                    href={opt.href}
+                    download={opt.file}
+                    className={`download-btn glassy ${opt.label.includes("Mac") ? "download-btn--mac" : ""}`}
+                  >
+                    {opt.label}
+                  </a>
+                ))
+              )}
+              <a href={`${baseUrl}#pricing`} className="seo-secondary-link">
+                View pricing
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-12 md:grid-cols-3">
+        {page.sections.map((section) => (
+          <article key={section.heading} className="seo-card">
+            <h2>{section.heading}</h2>
+            <p>{section.body}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-10">
+        <div className="seo-split">
+          <div>
+            <p className="seo-eyebrow">Search intent coverage</p>
+            <h2>Related ways people search for this</h2>
+            <p>
+              This page is written around one clear topic, with related phrases grouped naturally instead of stuffed into hidden metadata.
+            </p>
+          </div>
+          <div className="seo-keywords" aria-label="Related search phrases">
+            {page.relatedKeywords.map((keyword) => (
+              <span key={keyword}>{keyword}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-4xl px-4 py-10">
+        <p className="seo-eyebrow text-center">FAQ</p>
+        <h2 className="seo-faq-title">Common questions</h2>
+        <div className="seo-faq-list">
+          {page.faqs.map((faq) => (
+            <article key={faq.q} className="seo-faq-item">
+              <h3>{faq.q}</h3>
+              <p>{faq.a}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <div className="seo-cta">
+          <div>
+            <p className="seo-eyebrow">Get started</p>
+            <h2>Use Introscribe in your next live conversation</h2>
+            <p>Download the desktop app for real-time transcription, meeting notes, interview support, and contextual AI answers.</p>
+          </div>
+          <a href={baseUrl} className="seo-secondary-link seo-secondary-link--dark">
+            Back to homepage
+          </a>
+        </div>
+      </section>
+    </main>
+  );
+
   return (
   <div className="min-h-screen text-zinc-900 dark:text-white">
       {isMobile && showDesktopModal && (
@@ -599,6 +739,8 @@ export default function introscribeLanding() {
             Go back home
           </button>
         </main>
+      ) : activeSeoPage ? (
+        <SeoContentPage page={activeSeoPage} />
       ) : (
         <>
           {/* Hero */}
