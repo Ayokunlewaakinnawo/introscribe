@@ -578,13 +578,34 @@ export default function introscribeLanding() {
 
   const downloadOptions = os === "mac"
     ? [
-        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.29-arm64.pkg" },
-        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.28.exe" },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.29-arm64.pkg" },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.28.exe" },
       ]
     : [
-        { label: "Get for Windows", href: windowsInstaller, file: "introscribe-Setup-1.0.28.exe" },
-        { label: "Get for Mac OS", href: macInstaller, file: "introscribe-1.0.29-arm64.pkg" },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.28.exe" },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.29-arm64.pkg" },
       ];
+
+  const DownloadPlatformIcon = ({ platform }) => (
+    <span className="download-icon-box">
+      {platform === "mac" ? (
+        <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false">
+          <g>
+            <path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path>
+          </g>
+        </svg>
+      ) : (
+        <svg width="15" height="15" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <g>
+            <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
+            <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
+            <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
+            <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
+          </g>
+        </svg>
+      )}
+    </span>
+  );
 
   const SeoContentPage = ({ page }) => (
     <main className="seo-page">
@@ -605,13 +626,11 @@ export default function introscribeLanding() {
                     download={opt.file}
                     className={`download-btn glassy ${opt.label.includes("Mac") ? "download-btn--mac" : ""}`}
                   >
+                    <DownloadPlatformIcon platform={opt.platform} />
                     {opt.label}
                   </a>
                 ))
               )}
-              <a href={`${baseUrl}#pricing`} className="seo-secondary-link">
-                View pricing
-              </a>
             </div>
           </div>
         </div>
