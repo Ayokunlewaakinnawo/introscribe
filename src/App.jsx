@@ -83,8 +83,8 @@ const HeroTyped = React.memo(function HeroTyped({ words }) {
 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
-  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.31.exe`;
-  const macInstaller = `${baseUrl}download/introscribe-1.0.31-arm64.pkg`;
+  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.30.exe`;
+  const macInstaller = `${baseUrl}download/introscribe-1.0.32-arm64.pkg`;
   const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
   const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
   const desktopLandingLink =
@@ -403,7 +403,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.31-arm64.pkg"
+                  download="introscribe-1.0.32-arm64.pkg"
                   className="download-btn download-btn--mac glassy download-btn--sm"
                   title="Download macOS installer"
                 >
@@ -578,12 +578,12 @@ export default function introscribeLanding() {
 
   const downloadOptions = os === "mac"
     ? [
-        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.31-arm64.pkg" },
-        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.31.exe" },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.32-arm64.pkg" },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.30.exe" },
       ]
     : [
-        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.31.exe" },
-        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.31-arm64.pkg" },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.30.exe" },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.32-arm64.pkg" },
       ];
 
   const DownloadPlatformIcon = ({ platform }) => (
@@ -780,7 +780,7 @@ export default function introscribeLanding() {
             ) : os === "mac" ? (
               <a
                 href={macInstaller}
-                download="introscribe-1.0.31-arm64.pkg"
+                download="introscribe-1.0.32-arm64.pkg"
                 className="download-btn download-btn--mac glassy"
                 title="Download macOS installer"
               >
@@ -815,7 +815,7 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.31-arm64.pkg"
+                  download="introscribe-1.0.32-arm64.pkg"
                   className="download-btn download-btn--mac glassy"
                   title="Download macOS installer"
                 >
@@ -1089,7 +1089,7 @@ export default function introscribeLanding() {
                 ) : os === "mac" ? (
                   <a
                     href={macInstaller}
-                    download="introscribe-1.0.31-arm64.pkg"
+                    download="introscribe-1.0.32-arm64.pkg"
                     className="download-btn download-btn--mac glassy"
                     title="Download macOS installer"
                   >
@@ -1131,7 +1131,7 @@ export default function introscribeLanding() {
                     </a>
                     <a
                       href={macInstaller}
-                      download="introscribe-1.0.31-arm64.pkg"
+                      download="introscribe-1.0.32-arm64.pkg"
                       className="download-btn download-btn--mac glassy"
                       title="Download macOS installer"
                     >
