@@ -81,10 +81,20 @@ const HeroTyped = React.memo(function HeroTyped({ words }) {
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
 
+const DOWNLOADS_BASE_URL = "https://storage.googleapis.com/introscribe_bucket/download";
+const DOWNLOAD_FILES = {
+  windows: {
+    url: `${DOWNLOADS_BASE_URL}/win_os/introscribe-windows.exe`,
+  },
+  mac: {
+    url: `${DOWNLOADS_BASE_URL}/mac_os/introscribe-mac.pkg`,
+  },
+};
+
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
-  const windowsInstaller = `${baseUrl}download/introscribe-Setup-1.0.32.exe`;
-  const macInstaller = `${baseUrl}download/introscribe-1.0.32-arm64.pkg`;
+  const windowsInstaller = DOWNLOAD_FILES.windows.url;
+  const macInstaller = DOWNLOAD_FILES.mac.url;
   const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
   const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
   const desktopLandingLink =
@@ -388,7 +398,7 @@ export default function introscribeLanding() {
               <DesktopRequiredCTA tone="light" align="start" fullWidth />
             ) : (
               <div className="flex gap-3">
-                <a href={windowsInstaller} download="introscribe-Setup-1.0.32.exe" className="download-btn glassy download-btn--sm" title="Download Windows installer">
+                <a href={windowsInstaller} className="download-btn glassy download-btn--sm" title="Download Windows installer">
                   <span className="download-icon-box">
                     <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                       <g>
@@ -403,7 +413,6 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.32-arm64.pkg"
                   className="download-btn download-btn--mac glassy download-btn--sm"
                   title="Download macOS installer"
                 >
@@ -578,12 +587,12 @@ export default function introscribeLanding() {
 
   const downloadOptions = os === "mac"
     ? [
-        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.32-arm64.pkg" },
-        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.32.exe" },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller },
       ]
     : [
-        { label: "Get for Windows", platform: "windows", href: windowsInstaller, file: "introscribe-Setup-1.0.32.exe" },
-        { label: "Get for Mac OS", platform: "mac", href: macInstaller, file: "introscribe-1.0.32-arm64.pkg" },
+        { label: "Get for Windows", platform: "windows", href: windowsInstaller },
+        { label: "Get for Mac OS", platform: "mac", href: macInstaller },
       ];
 
   const DownloadPlatformIcon = ({ platform }) => (
@@ -623,7 +632,6 @@ export default function introscribeLanding() {
                   <a
                     key={opt.label}
                     href={opt.href}
-                    download={opt.file}
                     className={`download-btn glassy ${opt.label.includes("Mac") ? "download-btn--mac" : ""}`}
                   >
                     <DownloadPlatformIcon platform={opt.platform} />
@@ -780,7 +788,6 @@ export default function introscribeLanding() {
             ) : os === "mac" ? (
               <a
                 href={macInstaller}
-                download="introscribe-1.0.32-arm64.pkg"
                 className="download-btn download-btn--mac glassy"
                 title="Download macOS installer"
               >
@@ -790,7 +797,7 @@ export default function introscribeLanding() {
                 Get for Mac OS
               </a>
             ) : os === "windows" ? (
-              <a href={windowsInstaller} download="introscribe-Setup-1.0.32.exe" className="download-btn glassy" title="Download Windows installer">
+              <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
                 <span className="download-icon-box">
                   {/* Windows icon */}
                   <svg fill="#ffffff" width="18" height="18" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>microsoft</title> <path d="M16.742 16.742v14.253h14.253v-14.253zM1.004 16.742v14.253h14.256v-14.253zM16.742 1.004v14.256h14.253v-14.256zM1.004 1.004v14.256h14.256v-14.256z"></path> </g></svg>
@@ -799,7 +806,7 @@ export default function introscribeLanding() {
               </a>
             ) : (
               <>
-                <a href={windowsInstaller} download="introscribe-Setup-1.0.32.exe" className="download-btn glassy" title="Download Windows installer">
+                <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
                   <span className="download-icon-box">
                     {/* Windows icon */}
                     <svg width="15" height="15" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -815,7 +822,6 @@ export default function introscribeLanding() {
                 </a>
                 <a
                   href={macInstaller}
-                  download="introscribe-1.0.32-arm64.pkg"
                   className="download-btn download-btn--mac glassy"
                   title="Download macOS installer"
                 >
@@ -1008,7 +1014,6 @@ export default function introscribeLanding() {
                           <a
                             key={opt.label}
                             href={opt.href}
-                          download={opt.file}
                             className="block rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 dark:text-white"
                             onClick={() => setShowFreeDownloads(false)}
                           >
@@ -1089,7 +1094,6 @@ export default function introscribeLanding() {
                 ) : os === "mac" ? (
                   <a
                     href={macInstaller}
-                    download="introscribe-1.0.32-arm64.pkg"
                     className="download-btn download-btn--mac glassy"
                     title="Download macOS installer"
                   >
@@ -1099,7 +1103,7 @@ export default function introscribeLanding() {
                     Get for Mac OS
                   </a>
                 ) : os === "windows" ? (
-                  <a href={windowsInstaller} download="introscribe-Setup-1.0.32.exe" className="download-btn glassy" title="Download Windows installer">
+                  <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
                     <span className="download-icon-box">
                       {/* Windows icon (updated 4-pane) */}
                       <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -1115,7 +1119,7 @@ export default function introscribeLanding() {
                   </a>
                 ) : (
                   <>
-                    <a href={windowsInstaller} download="introscribe-Setup-1.0.32.exe" className="download-btn glassy" title="Download Windows installer">
+                    <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
                       <span className="download-icon-box">
                         {/* Windows icon (updated 4-pane) */}
                         <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -1131,7 +1135,6 @@ export default function introscribeLanding() {
                     </a>
                     <a
                       href={macInstaller}
-                      download="introscribe-1.0.32-arm64.pkg"
                       className="download-btn download-btn--mac glassy"
                       title="Download macOS installer"
                     >
