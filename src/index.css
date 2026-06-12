@@ -878,11 +878,15 @@ body {
 .dark .seo-card {
 	background: rgba(255,255,255,.05);
 }
-.seo-card h2,
 .seo-split h2,
 .seo-cta h2 {
 	font-size: 1.55rem;
 	line-height: 1.15;
+	font-weight: 650;
+}
+.seo-card h2 {
+	font-size: 1.15rem;
+	line-height: 1.25;
 	font-weight: 650;
 }
 .seo-card p,
@@ -950,6 +954,89 @@ body {
 }
 .dark .seo-cta {
 	background: rgba(255,255,255,.06);
+}
+
+.footer-heading {
+	font-size: 1rem;
+	line-height: 1.4;
+	font-weight: 700;
+	color: #09090b;
+}
+.dark .footer-heading {
+	color: #ffffff;
+}
+.footer-link-list {
+	margin-top: 1.75rem;
+	display: grid;
+	gap: 1.05rem;
+	color: #4b5563;
+	font-size: 1rem;
+	line-height: 1.55;
+}
+.dark .footer-link-list {
+	color: #d4d4d8;
+}
+.footer-link-list a,
+footer a {
+	transition: color .2s ease;
+}
+.footer-link-list a:hover,
+footer a:hover {
+	color: #075ee8;
+}
+.dark .footer-link-list a:hover,
+.dark footer a:hover {
+	color: #60a5fa;
+}
+.footer-download-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: .85rem;
+	min-height: 4rem;
+	width: 100%;
+	max-width: 12rem;
+	border-radius: 8px;
+	padding: .85rem 1.15rem;
+	box-shadow: 0 16px 38px -24px rgba(15, 23, 42, .55);
+	transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.footer-download-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 20px 44px -24px rgba(15, 23, 42, .7);
+}
+.footer-download-btn--windows {
+	background: linear-gradient(135deg, #1d5ef3 0%, #155dfc 48%, #7eaaf3 100%);
+	color: #ffffff;
+}
+.footer-download-btn--windows:hover {
+	color: #ffffff;
+	background: linear-gradient(135deg, #0a43c7 0%, #0f4fe3 48%, #2563eb 100%);
+}
+.footer-download-btn--mac {
+	border: 1px solid rgba(0, 0, 0, 0.175);
+	background: rgba(255,255,255,.86);
+	color: #111827;
+}
+.footer-download-btn--mac:hover {
+	color: #111827;
+	background: #ffffff;
+}
+.dark .footer-download-btn--mac {
+	border-color: rgba(255,255,255,.14);
+	background: rgba(255,255,255,.09);
+	color: #ffffff;
+}
+.dark .footer-download-btn--mac:hover {
+	color: #ffffff;
+	background: rgba(255,255,255,.14);
+}
+.footer-download-icon {
+	display: inline-flex;
+	height: 1.65rem;
+	width: 1.65rem;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
 }
 
 /* Unified section heading style */

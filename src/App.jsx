@@ -1,7 +1,7 @@
 // Prevent removal by automated tools
 import React from "react";
 
-import { Brain, Check, ChevronDown, Clock10, HatGlasses, MessageCircle, Mic, Moon, Shield, Sun, Zap } from "lucide-react";
+import { ArrowRight, Brain, Check, ChevronDown, Clock10, HatGlasses, MessageCircle, Mic, Moon, Shield, Sun, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SITE_URL, homeSeo, seoPages, seoPagesBySlug } from "./seoPages";
 
@@ -90,6 +90,19 @@ const DOWNLOAD_FILES = {
     url: `${DOWNLOADS_BASE_URL}/mac_os/introscribe-mac.pkg`,
   },
 };
+
+const FOOTER_USE_CASES = [
+  { label: "AI Interview Assistant for Real-Time Interview Help", slug: "ai-interview-assistant" },
+  { label: "AI Meeting Assistant for Live Notes and Answers", slug: "ai-meeting-assistant" },
+  { label: "Real-Time Conversation Assistant for Professional Calls", slug: "real-time-conversation-assistant" },
+  { label: "AI Sales Call Assistant for Live Conversations", slug: "sales-call-assistant" },
+  { label: "Live Transcription Software with Real-Time AI", slug: "live-transcription-software" },
+  { label: "Cluely Alternative for Meetings and Interviews", slug: "cluely-alternative" },
+  { label: "FinalRound AI Alternative for Interview Support", slug: "finalround-ai-alternative" },
+  { label: "Otter.ai Alternative for Live AI Meeting Help", slug: "otter-ai-alternative" },
+  { label: "Fireflies.ai Alternative for Real-Time Meeting Assistance", slug: "fireflies-ai-alternative" },
+  { label: "Gong Alternative for Sales Call Assistance", slug: "gong-alternative" },
+];
 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
@@ -328,117 +341,112 @@ export default function introscribeLanding() {
   );
 
   const Footer = () => (
-    <footer className="mt-16 border-t border-black/5 bg-zinc-50 py-10 text-sm dark:border-white/10 dark:bg-zinc-900">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 relative h-[30px]">
-              <a href={baseUrl} aria-label="Go to landing page" className="block h-full w-auto relative">
-                <img
-                  src="/logo-b.png"
-                  alt="introscribe logo"
-                  className="h-[30px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
-                  decoding="async"
-                />
-                <img
-                  src="/logo-w.png"
-                  alt="introscribe logo (dark)"
-                  className="absolute inset-0 h-[30px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
-                  decoding="async"
-                  aria-hidden="true"
-                />
-              </a>
-            </div>
-          </div>
-          <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-            introscribe is an AI meeting companion—capture, summarize, and action every conversation.
-          </p>
-        </div>
-        <div>
-          <div className="font-semibold">Benefits</div>
-          <ul className="mt-3 space-y-2 text-zinc-600 dark:text-zinc-300">
-            <li>
-              <a href={`${baseUrl}#benefits`}>
-                Overview
-              </a>
-            </li>
-            <li>
-              <a href={`${baseUrl}#how`}>
-                How it Works
-              </a>
-            </li>
-            <li>
-              <a href={`${baseUrl}#pricing`}>
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a href={`${baseUrl}#faq`}>
-                FAQ
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-semibold">Capture More, Type Less</div>
-          <p className="mt-3 text-zinc-600 dark:text-zinc-300">
-            Download introscribe to capture, summarize, and action meetings wherever you work.
-          </p>
-          <a
-            href="mailto:support@introscribe.com"
-            className="mt-3 inline-flex text-sm font-medium text-blue-600 dark:text-blue-400"
-          >
-            Contact us
-          </a>
-        </div>
-        <div>
-          <div className="font-semibold">Get the App</div>
-          <div className="mt-3">
-            {isMobile ? (
-              <DesktopRequiredCTA tone="light" align="start" fullWidth />
-            ) : (
-              <div className="flex gap-3">
-                <a href={windowsInstaller} className="download-btn glassy download-btn--sm" title="Download Windows installer">
-                  <span className="download-icon-box">
-                    <svg width="12" height="12" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <g>
+    <footer className="mt-16 border-t border-zinc-200 bg-white py-16 text-sm dark:border-white/10 dark:bg-black">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-10 lg:grid-cols-[1.35fr_0.7fr_0.95fr_1.7fr]">
+          <div>
+            <a href={baseUrl} aria-label="Go to landing page" className="relative block h-[38px] w-fit">
+              <img
+                src="/logo-b.png"
+                alt="introscribe logo"
+                className="h-[38px] w-auto transition-opacity duration-300 opacity-100 dark:opacity-0"
+                decoding="async"
+              />
+              <img
+                src="/logo-w.png"
+                alt="introscribe logo (dark)"
+                className="absolute inset-0 h-[38px] w-auto transition-opacity duration-300 opacity-0 dark:opacity-100"
+                decoding="async"
+                aria-hidden="true"
+              />
+            </a>
+            <p className="mt-8 max-w-[18rem] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+              AI meeting companion — capture, summarize, and action every conversation.
+            </p>
+            <div className="mt-8">
+              {isMobile ? (
+                <DesktopRequiredCTA tone="light" align="start" fullWidth />
+              ) : (
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <a
+                    href={windowsInstaller}
+                    className="footer-download-btn footer-download-btn--windows"
+                    title="Download Windows installer"
+                  >
+                    <span className="footer-download-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 19.132 19.132" fill="currentColor" xmlns="http://www.w3.org/2000/svg" focusable="false">
                         <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
                         <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
                         <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
                         <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                      </g>
-                    </svg>
-                  </span>
-                  Windows
-                </a>
-                <a
-                  href={macInstaller}
-                  className="download-btn download-btn--mac glassy download-btn--sm"
-                  title="Download macOS installer"
-                >
-                  <span className="download-icon-box">
-                    <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false">
-                      <g>
+                      </svg>
+                    </span>
+                    <span>
+                      <span className="block text-[12px] leading-4 font-medium">Download for</span>
+                      <span className="block text-base leading-5 font-semibold">Windows</span>
+                    </span>
+                  </a>
+                  <a
+                    href={macInstaller}
+                    className="footer-download-btn footer-download-btn--mac"
+                    title="Download macOS installer"
+                  >
+                    <span className="footer-download-icon" aria-hidden="true">
+                      <svg fill="currentColor" height="21" width="21" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" focusable="false">
                         <path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path>
-                      </g>
-                    </svg>
-                  </span>
-                  Mac OS
-                </a>
-              </div>
-            )}
+                      </svg>
+                    </span>
+                    <span>
+                      <span className="block text-[12px] leading-4 font-medium">Download for</span>
+                      <span className="block text-base leading-5 font-semibold">Mac OS</span>
+                    </span>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="footer-heading">Product</h2>
+            <ul className="footer-link-list">
+              <li><a href={`${baseUrl}#benefits`}>Overview</a></li>
+              <li><a href={`${baseUrl}#how`}>How It Works</a></li>
+              <li><a href={`${baseUrl}#pricing`}>Pricing</a></li>
+              <li><a href={`${baseUrl}#faq`}>FAQ</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="footer-heading">Capture More, Type Less</h2>
+            <p className="mt-7 max-w-[18rem] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+              Download introscribe to capture, summarize, and action meetings whenever you work.
+            </p>
+            <a
+              href="mailto:support@introscribe.com"
+              className="mt-7 inline-flex items-center gap-3 text-base font-semibold text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              Contact us
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
+
+          <div>
+            <h2 className="footer-heading">Use Cases</h2>
+            <ul className="footer-link-list">
+              {FOOTER_USE_CASES.map((item) => (
+                <li key={item.slug}>
+                  <a href={`${baseUrl}${item.slug}`}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </div>
-      <div className="mx-auto mt-10 flex max-w-6xl flex-wrap gap-x-5 gap-y-2 px-4 text-xs text-zinc-500 dark:text-zinc-400">
-        {seoPages.slice(0, 10).map((page) => (
-          <a key={page.slug} href={`${baseUrl}${page.slug}`}>
-            {page.h1}
-          </a>
-        ))}
-      </div>
-      <div className="mx-auto mt-10 max-w-6xl px-4 text-xs text-zinc-500 dark:text-zinc-400">
-        © {new Date().getFullYear()} introscribe. All rights reserved.
+
+        <div className="mt-14 border-t border-zinc-200 pt-8 dark:border-white/10">
+          <div className="text-sm text-zinc-600 dark:text-zinc-400">
+            <p>© {new Date().getFullYear()} Introscribe. All rights reserved.</p>
+          </div>
+        </div>
       </div>
     </footer>
   );
