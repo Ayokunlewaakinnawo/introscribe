@@ -655,8 +655,27 @@ export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
   const windowsInstaller = DOWNLOAD_FILES.windows.url;
   const macInstaller = DOWNLOAD_FILES.mac.url;
-  const mobileDownloadEndpoint = "https://app.introscribe.com/download-mobile";
   const desktopAppCopy = "Introscribe is a desktop app for macOS & Windows";
+  const desktopRequirements = [
+    {
+      label: "macOS",
+      items: [
+        "macOS 10.15 (Catalina) or later",
+        "Apple Silicon or Intel processor",
+        "500 MB free disk space",
+        "8 GB RAM recommended",
+      ],
+    },
+    {
+      label: "Windows",
+      items: [
+        "Windows 11",
+        "x64 (64-bit) processor",
+        "500 MB free disk space",
+        "8 GB RAM recommended",
+      ],
+    },
+  ];
   const desktopLandingLink =
     typeof window !== "undefined"
       ? (() => {
@@ -703,7 +722,6 @@ export default function introscribeLanding() {
   const indicatorRef = useRef(null);
   const [os, setOs] = useState(() => detectPlatform());
   const [showDesktopModal, setShowDesktopModal] = useState(false);
-  const [shareEmail, setShareEmail] = useState("");
   const [shareStatus, setShareStatus] = useState("");
   const [showCookieSettings, setShowCookieSettings] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState(() => {
@@ -864,30 +882,6 @@ export default function introscribeLanding() {
       setShareStatus("Link copied. Open it on desktop to download.");
     } catch {
       setShareStatus("Copy unavailable here. Long-press and copy the link instead.");
-    }
-  };
-
-  const handleEmailDesktopLink = async () => {
-    const email = shareEmail.trim();
-    if (!email) {
-      setShareStatus("Enter an email to send the desktop link.");
-      return;
-    }
-
-    setShareStatus("Sending...");
-    try {
-      const res = await fetch(mobileDownloadEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed");
-      }
-      setShareStatus("Link sent! Check your email on desktop to download.");
-    } catch (err) {
-      setShareStatus("Something went wrong. Try again or copy the link instead.");
     }
   };
 
@@ -1523,14 +1517,6 @@ export default function introscribeLanding() {
       <main className="download-page">
         <section className="download-page-hero">
           <div className="download-page-container">
-            <img
-              src="/ty.png"
-              alt=""
-              className="download-page-hero-image"
-              loading="lazy"
-              decoding="async"
-              aria-hidden="true"
-            />
             <h1>Download the Introscribe desktop app</h1>
             <p>
               Introscribe takes perfect meeting notes and gives you real-time answers,
@@ -2212,20 +2198,19 @@ export default function introscribeLanding() {
           </div>
             </div>
             <div className="desktop-modal__body">
-              <label className="desktop-modal__label" htmlFor="share-email">Email me the download link</label>
-              <input
-                id="share-email"
-                type="email"
-                inputMode="email"
-                className="desktop-modal__input"
-                placeholder="name@email.com"
-                value={shareEmail}
-                onChange={(e) => setShareEmail(e.target.value)}
-              />
-              <button type="button" className="desktop-modal__action" onClick={handleEmailDesktopLink}>
-                Email me the download link
-              </button>
-              <div className="desktop-modal__divider">or</div>
+              <div className="desktop-modal__requirements" aria-label="Optimal computer requirements">
+                <p className="desktop-modal__label">Optimal computer requirements</p>
+                {desktopRequirements.map((requirement) => (
+                  <div className="desktop-modal__requirement-group" key={requirement.label}>
+                    <h4>{requirement.label}</h4>
+                    <ul>
+                      {requirement.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
               <button type="button" className="desktop-modal__action desktop-modal__action--ghost" onClick={handleCopyDesktopLink}>
                 Copy link to open on desktop
               </button>
@@ -2239,7 +2224,7 @@ export default function introscribeLanding() {
               {shareStatus ? (
                 <p className="desktop-modal__hint">{shareStatus}</p>
               ) : (
-                <p className="desktop-modal__hint">We'll hold your spot - open this on desktop and the download begins.</p>
+                <p className="desktop-modal__hint">Open this site on a supported desktop computer to download and install Introscribe.</p>
               )}
             </div>
           </div>
@@ -2774,12 +2759,12 @@ export default function introscribeLanding() {
           <div className="relative flex h-full items-center justify-center">
             <div className="smart-cta-content px-4 md:px-10 max-w-2xl text-center" style={{ zIndex: 1 }}>
               <h3 className="text-3xl md:text-4xl font-semibold leading-tight whitespace-pre-line cta-head-shadow">Never Miss a Moment That Matters</h3>
-              <p className="mt-2 text-zinc-300">
+              <p className="mt-2 hidden text-zinc-300 md:block">
                 From first hello to final follow‑up, Introscribe quietly records, transcribes, and distills every conversation into insight — so you stay fully present while nothing slips through the cracks.
               </p>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
                 {isMobile ? (
-                  <DesktopRequiredCTA tone="dark" align="start" />
+                  <DesktopRequiredCTA tone="dark" />
                 ) : os === "mac" ? (
                   <a
                     href={macInstaller}
