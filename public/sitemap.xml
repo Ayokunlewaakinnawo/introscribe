@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://introscribe.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://introscribe.com/download</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://introscribe.com/ai-interview-assistant</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://introscribe.com/ai-meeting-assistant</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://introscribe.com/real-time-conversation-assistant</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
@@ -19,4 +20,6 @@
   <url><loc>https://introscribe.com/blog/best-finalround-ai-alternative</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://introscribe.com/blog/how-to-prepare-for-system-design-interviews</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://introscribe.com/blog/how-to-answer-behavioral-interview-questions</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://introscribe.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://introscribe.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
