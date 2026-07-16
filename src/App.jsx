@@ -462,6 +462,8 @@ const DraggableFeatureSessionOverlay = ({
   compactLabel = "Start Listening",
   compactButtonTone = "primary",
   initialPrivateActive = true,
+  placement = "center",
+  topOffset = 20,
   className = "",
 }) => {
   const overlayScale = 0.78;
@@ -514,9 +516,13 @@ const DraggableFeatureSessionOverlay = ({
 
     const stageRect = stage.getBoundingClientRect();
     const panelRect = panel.getBoundingClientRect();
+    const nextX = (stageRect.width - panelRect.width) / 2;
+    const nextY = placement === "top"
+      ? topOffset
+      : (stageRect.height - panelRect.height) / 2;
     return clampPosition(
-      (stageRect.width - panelRect.width) / 2,
-      (stageRect.height - panelRect.height) / 2
+      nextX,
+      nextY
     );
   };
 
@@ -531,7 +537,7 @@ const DraggableFeatureSessionOverlay = ({
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", handleResize);
     };
-  }, [collapsed]);
+  }, [collapsed, placement, topOffset]);
 
   const handlePointerDown = (event) => {
     if (event.button !== undefined && event.button !== 0) return;
@@ -717,6 +723,7 @@ export default function introscribeLanding() {
   const privacyDemoPlayedRef = useRef(false);
   const featureOverlayStageRef = useRef(null);
   const transcriptionOverlayStageRef = useRef(null);
+  const archOverlayStageRef = useRef(null);
   const monthlyBtnRef = useRef(null);
   const yearlyBtnRef = useRef(null);
   const indicatorRef = useRef(null);
@@ -2742,86 +2749,29 @@ export default function introscribeLanding() {
         </div>
       </section>
 
-      {/* Smart AI CTA */}
-      <section className="mx-auto max-w-7xl px-4 py-14">
-        <div className="smart-cta-holder relative overflow-hidden rounded-3xl border p-5 text-white shadow-lg dark:border-white/10">
-          <video
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-            src="/pre_footer.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
+      <section className="post-faq-arch" aria-label="Introscribe architecture overview">
+        <div ref={archOverlayStageRef} className="post-faq-arch__frame">
+          <img
+            src="/arch.png"
+            alt="Introscribe architecture overview"
+            className="post-faq-arch__image post-faq-arch__image--light"
+            loading="lazy"
+            decoding="async"
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/50 pointer-events-none"></div>
-          <div className="relative flex h-full items-center justify-center">
-            <div className="smart-cta-content px-4 md:px-10 max-w-2xl text-center" style={{ zIndex: 1 }}>
-              <h3 className="text-3xl md:text-4xl font-semibold leading-tight whitespace-pre-line cta-head-shadow">Never Miss a Moment That Matters</h3>
-              <p className="mt-2 hidden text-zinc-300 md:block">
-                From first hello to final follow‑up, Introscribe quietly records, transcribes, and distills every conversation into insight — so you stay fully present while nothing slips through the cracks.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-                {isMobile ? (
-                  <DesktopRequiredCTA tone="dark" />
-                ) : os === "mac" ? (
-                  <a
-                    href={macInstaller}
-                    className="download-btn download-btn--mac glassy"
-                    title="Download macOS installer"
-                  >
-                    <span className="download-icon-box">
-                      <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-                    </span>
-                    Get for Mac OS
-                  </a>
-                ) : os === "windows" ? (
-                  <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
-                    <span className="download-icon-box">
-                      {/* Windows icon (updated 4-pane) */}
-                      <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                        <g>
-                          <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                          <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                          <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                          <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                        </g>
-                      </svg>
-                    </span>
-                    Get for Windows
-                  </a>
-                ) : (
-                  <>
-                    <a href={windowsInstaller} className="download-btn glassy" title="Download Windows installer">
-                      <span className="download-icon-box">
-                        {/* Windows icon (updated 4-pane) */}
-                        <svg width="13" height="13" viewBox="0 0 19.132 19.132" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                          <g>
-                            <path d="M9.172 9.179V0.146H0v9.033h9.172z" />
-                            <path d="M19.132 9.179V0.146H9.959v9.033h9.173z" />
-                            <path d="M19.132 18.986V9.955H9.959v9.032h9.173z" />
-                            <path d="M9.172 18.986V9.955H0v9.032h9.172z" />
-                          </g>
-                        </svg>
-                      </span>
-                      Get for Windows
-                    </a>
-                    <a
-                      href={macInstaller}
-                      className="download-btn download-btn--mac glassy"
-                      title="Download macOS installer"
-                    >
-                      <span className="download-icon-box">
-                        <svg fill="#ffffff" height="14px" width="14px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-145 129 220 256" aria-hidden="true" focusable="false"><g><path d="M75,316.8c-6,13.3-8.9,19.3-16.6,31c-10.8,16.4-26,36.9-44.9,37.1c-16.8,0.2-21.1-10.9-43.8-10.8 c-22.7,0.1-27.5,11-44.3,10.8c-18.9-0.2-33.3-18.7-44.1-35.1c-30.2-46-33.4-99.9-14.7-128.6c13.2-20.4,34.1-32.3,53.8-32.3 c20,0,32.5,11,49.1,11c16,0,25.8-11,48.9-11c17.5,0,36,9.5,49.2,26C24.3,238.6,31.3,300.3,75,316.8L75,316.8z M0.8,170.6 c8.4-10.8,14.8-26,12.5-41.6c-13.7,0.9-29.8,9.7-39.1,21.1c-8.5,10.3-15.5,25.6-12.8,40.5C-23.7,191.1-8.2,182.1,0.8,170.6 L0.8,170.6z"></path></g></svg>
-                      </span>
-                      Get for Mac OS
-                    </a>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+          <img
+            src="/arch_dark.png"
+            alt="Introscribe architecture overview"
+            className="post-faq-arch__image post-faq-arch__image--dark"
+            loading="lazy"
+            decoding="async"
+          />
+          <DraggableFeatureSessionOverlay
+            stageRef={archOverlayStageRef}
+            defaultCollapsed
+            placement="top"
+            topOffset={18}
+            className="feature-session-overlay--arch"
+          />
         </div>
       </section>
 
