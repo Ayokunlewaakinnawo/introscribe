@@ -2129,8 +2129,9 @@ footer a:hover {
 		padding: 1.5rem;
 	}
 	.footer-main-grid {
-		grid-template-columns: 1fr;
-		gap: 2rem;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 1rem;
+		row-gap: 2rem;
 	}
 	.footer-bottom-row {
 		align-items: flex-start;
@@ -2213,11 +2214,17 @@ footer a:hover {
 	h4 { font-size: 1.05rem; }
 	.price-number { font-size: 2rem; }
 	.section-heading { font-size: 1.6rem; }
-	.max-w-6xl { padding-top: 1rem; }
 }
 
 @media (max-width: 768px) {
-	.hero-text-glow h1 { font-size: 48px; line-height: 1.08; margin-top: 20px; }
+	.hero-text-glow h1 { font-size: 48px; line-height: 1.08; }
+	/* Let the hero end where its content ends instead of padding out to a full screen */
+	.landing-bg:not(.page-landing-bg) { min-height: 0; }
+}
+
+/* Single-column pricing: cards size to their content */
+@media (max-width: 767px) {
+	.pricing-card { min-height: 0; height: auto; }
 }
 
 /* Touch-friendly sizing for buttons/tabs on mobile */
@@ -3264,4 +3271,9 @@ footer a:hover {
 	.feature-session-overlay--arch {
 		width: min(620px, calc(100% - 28px));
 	}
+}
+
+/* The collapsed overlay is all that shows at this width, so the stage can hug the video */
+@media (max-width: 730px) {
+	.session-overlay-stage { min-height: 0; }
 }

@@ -389,7 +389,7 @@ const DraggableSessionOverlay = () => {
   };
 
   return (
-    <div ref={stageRef} className="relative mx-auto mt-12 w-full max-w-6xl px-4 phone-mock-animate mockup-container overflow-hidden session-overlay-stage">
+    <div ref={stageRef} className="relative mx-auto mt-10 w-full max-w-6xl px-0 sm:px-4 md:mt-12 phone-mock-animate mockup-container overflow-hidden session-overlay-stage">
       <video
         src="/introscribe_landing.mp4"
         className="mx-auto w-full max-w-[1120px] mockup-video"
@@ -466,8 +466,8 @@ const DraggableFeatureSessionOverlay = ({
   topOffset = 20,
   className = "",
 }) => {
-  const overlayScale = 0.78;
   const panelRef = useRef(null);
+  const [overlayScale, setOverlayScale] = useState(0.78);
   const dragRef = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -527,6 +527,17 @@ const DraggableFeatureSessionOverlay = ({
   };
 
   useEffect(() => {
+    const updateScale = () => {
+      const stageWidth = stageRef.current?.getBoundingClientRect().width ?? 0;
+      setOverlayScale(stageWidth && stageWidth < 460 ? Math.max(0.62, (0.78 * stageWidth) / 460) : 0.78);
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [stageRef]);
+
+  useEffect(() => {
     const handleResize = () => {
       setPosition(getCenterPosition());
     };
@@ -537,7 +548,7 @@ const DraggableFeatureSessionOverlay = ({
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", handleResize);
     };
-  }, [collapsed, placement, topOffset]);
+  }, [collapsed, placement, topOffset, overlayScale]);
 
   const handlePointerDown = (event) => {
     if (event.button !== undefined && event.button !== 0) return;
@@ -1608,7 +1619,7 @@ export default function introscribeLanding() {
             <p className="seo-intro">{page.intro}</p>
             <div className="seo-actions">
               {isMobile ? (
-                <DesktopRequiredCTA tone="light" align="start" />
+                <DesktopRequiredCTA tone="light" />
               ) : (
                 downloadOptions.map((opt) => (
                   <a
@@ -2271,9 +2282,9 @@ export default function introscribeLanding() {
       ) : (
         <main data-scroll-reveal-root>
           {/* Hero */}
-      <section className="landing-bg landing-bg-animate w-full pb-16">
+      <section className="landing-bg landing-bg-animate w-full pb-8 md:pb-16">
         <Header />
-        <div className="mx-auto max-w-6xl px-4 pt-14 md:pt-24">
+        <div className="mx-auto max-w-6xl px-4 pt-10 md:pt-24">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center text-white hero-text-glow">
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl hero-title-animate">
            Your Real-Time AI Assistant
@@ -2364,7 +2375,7 @@ export default function introscribeLanding() {
 
   {/* Feature Sections */}
       <section id="how" className="mx-auto max-w-7xl px-4 py-6 md:py-10">
-        <div className="grid gap-[8.5rem]">
+        <div className="grid gap-24 md:gap-[8.5rem]">
           {features.map((f, i) => {
             if (i === 0) {
               return (
@@ -2376,7 +2387,7 @@ export default function introscribeLanding() {
 	                    <h3 className="price-number font-semibold leading-[1.05] tracking-tight whitespace-pre-line">{f.title}</h3>
 	                    <p className="mx-auto mt-2 max-w-2xl text-zinc-600 dark:text-zinc-300">{f.desc}</p>
 	                  </div>
-	                  <div className="undetectable-media-grid grid gap-5 pt-8 md:grid-cols-2 md:pt-10">
+	                  <div className="undetectable-media-grid grid gap-5 gap-y-10 pt-8 md:grid-cols-2 md:gap-y-5 md:pt-10">
 	                    <div className="privacy-preview-column">
 	                      <div
 	                        ref={privacyPreviewRef}
@@ -2458,7 +2469,7 @@ export default function introscribeLanding() {
 
             if (i === 1) {
               return (
-                <div key={i} className="grid gap-8 pt-8">
+                <div key={i} className="grid gap-8 md:pt-8">
                   <div className="mx-auto max-w-3xl text-center">
                     <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium dark:border-white/10">
                       <f.icon className="h-3.5 w-3.5" /> {f.tag}
@@ -2483,7 +2494,7 @@ export default function introscribeLanding() {
 
             if (f.stats) {
               return (
-                <div key={i} className="grid gap-8 pt-8">
+                <div key={i} className="grid gap-8 md:pt-8">
                   <div className="mx-auto max-w-3xl text-center">
                     <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium dark:border-white/10">
                       <f.icon className="h-3.5 w-3.5" /> {f.tag}
@@ -2726,11 +2737,11 @@ export default function introscribeLanding() {
           {faqs.map((item, i) => (
             <div
               key={i}
-              className={`px-5 md:px-7 ${i < faqs.length - 1 ? 'border-b border-zinc-200 dark:border-white/10' : ''}`}
+              className={`px-1 md:px-7 ${i < faqs.length - 1 ? 'border-b border-zinc-200 dark:border-white/10' : ''}`}
             >
               <button
                 onClick={() => setOpenFAQ((cur) => (cur === i ? null : i))}
-                className="flex w-full items-center justify-between gap-6 py-6 text-left text-xl md:text-2xl"
+                className="flex w-full items-center justify-between gap-6 py-5 text-left text-lg md:py-6 md:text-2xl"
               >
                 <span className="font-medium">{item.q}</span>
                 <ChevronDown
