@@ -1,12 +1,11 @@
 // Prevent removal by automated tools
 import React from "react";
 
-import { AlignJustify, ArrowRight, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronUp, CircleHelp, Clock10, Command, Cookie, Copy, CornerDownLeft, Database, FileText, Globe, HatGlasses, Layers, Lock, Mail, MessageCircle, MessageSquareText, Mic, Monitor, Moon, Route, Send, Server, Shield, ShieldCheck, Sparkles, Sun, Target, Trash2, UserCheck, X, Zap } from "lucide-react";
+import { AlignJustify, ArrowLeftRight, ArrowRight, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronUp, CircleHelp, Clock10, Command, Cookie, Copy, CornerDownLeft, CreditCard, Database, FileText, Globe, HatGlasses, Layers, Lock, Mail, MessageCircle, MessageSquareText, Mic, Monitor, Moon, Route, Send, Server, Shield, ShieldCheck, Sparkles, Sun, Target, Trash2, UserCheck, X, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { SITE_URL, homeSeo, seoPagesBySlug } from "./seoPages";
+import { SITE_URL, homeSeo, seoPages, seoPagesBySlug } from "./seoPages";
 
 const HERO_WORDS = ["Meetings", "Conversations", "Interviews"];
-const BENEFIT_WORDS = ["Meeting", "Conversation", "Interview"];
 const OVERLAY_COMPACT_BREAKPOINT = 730;
 
 const upsertMeta = (selector, createAttrs, valueAttr, value) => {
@@ -75,53 +74,6 @@ const HeroTyped = React.memo(function HeroTyped({ words }) {
   return (
     <span className="hero-typed">
       for {typedText}
-      <span className="typing-caret" aria-hidden="true"></span>
-    </span>
-  );
-});
-
-const BenefitTypedWord = React.memo(function BenefitTypedWord({ words }) {
-  const [wordIndex, setWordIndex] = useState(0);
-  const [typedText, setTypedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    if (!words.length) {
-      return;
-    }
-
-    const currentWord = words[wordIndex];
-    let delay = isDeleting ? 65 : 110;
-
-    if (!isDeleting && typedText === currentWord) {
-      delay = 1200;
-    } else if (isDeleting && typedText === "") {
-      delay = 350;
-    }
-
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (typedText.length < currentWord.length) {
-          setTypedText(currentWord.slice(0, typedText.length + 1));
-        } else {
-          setIsDeleting(true);
-        }
-      } else {
-        if (typedText.length > 0) {
-          setTypedText(currentWord.slice(0, typedText.length - 1));
-        } else {
-          setIsDeleting(false);
-          setWordIndex((prev) => (prev + 1) % words.length);
-        }
-      }
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [typedText, isDeleting, wordIndex, words]);
-
-  return (
-    <span className="benefit-typed-word" aria-label={words.join(", ")}>
-      {typedText}
       <span className="typing-caret" aria-hidden="true"></span>
     </span>
   );
@@ -642,6 +594,414 @@ const DraggableFeatureSessionOverlay = ({
   );
 };
 
+const USE_CASES = [
+  {
+    id: "interviews",
+    title: "Job interviews",
+    desc: "Real-time help with coding, system design, and behavioral questions while the interview is live.",
+    cta: "Explore Interview Assistant",
+    slug: "ai-interview-assistant",
+  },
+  {
+    id: "meetings",
+    title: "Meetings",
+    desc: "Live transcription, instant answers, and structured notes for every call.",
+    cta: "Explore Meeting Assistant",
+    slug: "ai-meeting-assistant",
+  },
+  {
+    id: "sales",
+    title: "Sales calls",
+    desc: "Objection handling and talk tracks on the call, visible only to you.",
+    cta: "Explore Sales Assistant",
+    slug: "sales-call-assistant",
+  },
+  {
+    id: "lectures",
+    title: "Trainings & lectures",
+    desc: "Transcribe and summarize sessions into searchable notes you can ask questions about later.",
+    cta: "Explore Live Transcription",
+    slug: "live-transcription-software",
+  },
+];
+
+const USE_CASE_ADVANCE_MS = 7000;
+
+// Staggered line inside the stage; `step` sets its entrance order.
+const StageLine = ({ step, className = "", children }) => (
+  <div className={`uc-line ${className}`} style={{ "--step": step }}>{children}</div>
+);
+
+const UseCaseStage = ({ id }) => {
+  if (id === "interviews") {
+    return (
+      <>
+        <div className="uc-window">
+          <p className="uc-window__label">Coding interview <span className="uc-window__timer">24:10</span></p>
+          <StageLine step={0} className="uc-prompt">Given an array of integers, return the indices of the two numbers that add up to a target.</StageLine>
+          <pre className="uc-code">
+            <StageLine step={1}><span className="tok-key">function</span> <span className="tok-fn">twoSum</span>(nums, target) {"{"}</StageLine>
+            <StageLine step={2}>{"  "}<span className="tok-key">const</span> seen = <span className="tok-key">new</span> <span className="tok-fn">Map</span>();</StageLine>
+            <StageLine step={3}>{"  "}<span className="tok-key">for</span> (<span className="tok-key">const</span> [i, n] <span className="tok-key">of</span> nums.<span className="tok-fn">entries</span>()) {"{"}</StageLine>
+            <StageLine step={4}>{"    "}<span className="tok-key">if</span> (seen.<span className="tok-fn">has</span>(target - n)) <span className="tok-key">return</span> [seen.<span className="tok-fn">get</span>(target - n), i];</StageLine>
+            <StageLine step={5}>{"    "}seen.<span className="tok-fn">set</span>(n, i);<span className="uc-caret" /></StageLine>
+          </pre>
+        </div>
+        <div className="uc-float">
+          <p className="uc-float__label uc-float__label--green">What to say next</p>
+          <p>Walk through the hash map approach: one pass, O(n) time and space.</p>
+        </div>
+      </>
+    );
+  }
+
+  if (id === "sales") {
+    return (
+      <>
+        <div className="uc-window">
+          <p className="uc-window__label">Discovery call <span className="uc-window__timer">00:42</span></p>
+          <StageLine step={0} className="uc-speaker">
+            <span className="uc-avatar uc-avatar--orange">D</span>
+            <div><b>Dana <em className="uc-flag">Objection</em></b><p>“We already use a tool for note-taking.”</p></div>
+          </StageLine>
+          <StageLine step={1} className="uc-speaker uc-speaker--muted">
+            <span className="uc-avatar">Y</span>
+            <div><b>You</b><p>“Totally fair. How do follow-ups happen today?”</p></div>
+          </StageLine>
+          <StageLine step={2} className="uc-meter">
+            <span>Buying signal</span><b><i /></b><span>Rising</span>
+          </StageLine>
+        </div>
+        <div className="uc-float">
+          <p className="uc-float__label uc-float__label--violet">How to respond</p>
+          <p>Ask what happens during the call, not after it.</p>
+        </div>
+      </>
+    );
+  }
+
+  if (id === "lectures") {
+    return (
+      <>
+        <div className="uc-window">
+          <p className="uc-window__label">Session notes</p>
+          <StageLine step={0} className="uc-title">Performance review training</StageLine>
+          <ul className="uc-moments">
+            <StageLine step={1}><time>04:12</time>Framing the self-assessment</StageLine>
+            <StageLine step={2}><time>18:40</time>Gathering 360 feedback</StageLine>
+            <StageLine step={3}><time>31:05</time>Writing fair, specific narratives</StageLine>
+          </ul>
+        </div>
+        <div className="uc-float">
+          <p className="uc-float__label uc-float__label--amber">Summary</p>
+          <p>Self-assessments need context, outcomes, and impact.</p>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="uc-window">
+        <p className="uc-window__label">
+          Live transcript
+          <span className="uc-wave"><i /><i /><i /><i /></span>
+        </p>
+        <StageLine step={0} className="uc-speaker">
+          <span className="uc-avatar uc-avatar--blue">M</span>
+          <div><b>Maya</b><p>“Let’s lock the launch date by Friday.”</p></div>
+        </StageLine>
+        <StageLine step={1} className="uc-speaker uc-speaker--muted">
+          <span className="uc-avatar">J</span>
+          <div><b>James</b><p>“Works for me. I’ll loop in design.”</p></div>
+        </StageLine>
+        <StageLine step={2} className="uc-speaker uc-speaker--muted">
+          <span className="uc-avatar uc-avatar--blue">M</span>
+          <div><b>Maya</b><p>“Great. Who owns the release notes?”</p></div>
+        </StageLine>
+      </div>
+      <div className="uc-float">
+        <p className="uc-float__label uc-float__label--blue"><Zap /> Action item</p>
+        <p>Maya to confirm the launch date by Friday.</p>
+      </div>
+    </>
+  );
+};
+
+// Shared layout: header on the left, a numbered list that drives a live stage on the right.
+// The list auto-advances while the block is on screen and pauses on hover/focus.
+const FeatureShowcase = ({
+  as: Tag = "section",
+  id,
+  className = "",
+  titleId,
+  title,
+  accent,
+  lead,
+  items,
+  renderStage,
+  initial = 0,
+}) => {
+  const rootRef = useRef(null);
+  const [active, setActive] = useState(initial);
+  const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [reduceMotion] = useState(
+    () => typeof window !== "undefined" && Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)
+  );
+  const autoplay = inView && !paused && !reduceMotion;
+
+  useEffect(() => {
+    const element = rootRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return undefined;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.3 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!autoplay) return undefined;
+    const timer = setTimeout(() => setActive((index) => (index + 1) % items.length), USE_CASE_ADVANCE_MS);
+    return () => clearTimeout(timer);
+  }, [autoplay, active, items.length]);
+
+  const current = items[active];
+
+  return (
+    <Tag id={id} ref={rootRef} className={className} aria-labelledby={titleId}>
+      <div
+        className="uc-body"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <div className="uc-content">
+          <div className="uc-head">
+            <h2 id={titleId} className="price-number">
+              {title} <span className="uc-head__accent">{accent}</span>
+            </h2>
+            <p>{lead}</p>
+          </div>
+          <ol className="uc-list">
+            {items.map((item, index) => {
+              const open = index === active;
+              const panelId = `${titleId}-panel-${item.id}`;
+              return (
+                <li key={item.id} className={`uc-item ${open ? "is-active" : ""}`}>
+                  <button
+                    type="button"
+                    className="uc-item__button"
+                    aria-expanded={open}
+                    aria-controls={panelId}
+                    onClick={() => setActive(index)}
+                  >
+                    <span className="uc-item__num">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="uc-item__title">{item.title}</span>
+                  </button>
+                  <div id={panelId} className="uc-item__panel" role="region" aria-label={item.title}>
+                    <div>
+                      <p>{item.desc}</p>
+                      {item.href ? (
+                        <a href={item.href} tabIndex={open ? undefined : -1}>
+                          {item.cta}
+                          <ArrowRight aria-hidden="true" />
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                  {open ? (
+                    <span
+                      key={`${active}-${autoplay}`}
+                      className={`uc-item__progress ${autoplay ? "is-running" : ""}`}
+                      style={{ "--uc-duration": `${USE_CASE_ADVANCE_MS}ms` }}
+                      aria-hidden="true"
+                    />
+                  ) : null}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        <div className="uc-stage" aria-hidden="true">
+          <div key={current.id} className="uc-stage__scene">
+            {renderStage(current.id)}
+          </div>
+        </div>
+      </div>
+    </Tag>
+  );
+};
+
+// "One assistant for every conversation"
+const UseCasesShowcase = ({ baseUrl }) => (
+  <FeatureShowcase
+    id="use-cases"
+    className="use-cases mx-auto max-w-7xl px-4 py-16 md:py-24"
+    titleId="use-cases-title"
+    title="One assistant for every"
+    accent="conversation."
+    lead="Introscribe is an AI interview assistant and meeting copilot in one desktop app: private, discreet, and real-time."
+    items={USE_CASES.map((useCase) => ({ ...useCase, href: `${baseUrl}${useCase.slug}` }))}
+    renderStage={(id) => <UseCaseStage id={id} />}
+    initial={1}
+  />
+);
+
+const NOTES_POINTS = [
+  { title: "Decisions and action items", desc: "Every call ends with what was decided, who owns what, and by when." },
+  { title: "Captured as it happens", desc: "Key moments land in your notes during the call, not after." },
+  { title: "One-click follow-ups", desc: "Turn any session into a recap email, or ask your notes a question later." },
+];
+
+// Transcript lines; `note` links a highlighted phrase to the line it writes into the notes.
+const NOTES_TRANSCRIPT = [
+  { who: "Maya", text: "Okay, let’s start with the launch timeline." },
+  { who: "James", text: "Design needs one more week on onboarding." },
+  { who: "Maya", before: "Then let’s ", mark: "move the launch to the second week of March", after: ".", note: "d1", tone: "decision" },
+  { who: "James", before: "Works for me. ", mark: "I’ll draft the release notes by March 4", after: ".", note: "a1", tone: "action" },
+  { who: "You", before: "", mark: "I’ll get design sign-off by Friday", after: ".", note: "a2", tone: "action" },
+  { who: "Maya", before: "And ", mark: "onboarding stays our top priority", after: " this quarter.", note: "d2", tone: "decision" },
+  { who: "Maya", before: "", mark: "I’ll brief the sales team next week", after: ".", note: "a3", tone: "action" },
+];
+
+const NOTES_DECISIONS = [
+  { id: "d1", text: "Launch moves to the second week of March." },
+  { id: "d2", text: "Onboarding stays the top priority this quarter." },
+];
+
+const NOTES_ACTIONS = [
+  { id: "a1", who: "J", owner: "James", text: "Draft the release notes", due: "Mar 4" },
+  { id: "a2", who: "Y", owner: "You", text: "Get design sign-off", due: "Fri" },
+  { id: "a3", who: "M", owner: "Maya", text: "Brief the sales team", due: "Next week" },
+];
+
+const NOTES_LINE_MS = 1400;
+
+// "Notes that write themselves": a live transcript on the left writes a clean notes page on the right.
+const NotesTransform = () => {
+  const rootRef = useRef(null);
+  const total = NOTES_TRANSCRIPT.length;
+  const [reduceMotion] = useState(
+    () => typeof window !== "undefined" && Boolean(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)
+  );
+  const [inView, setInView] = useState(false);
+  // How many transcript lines have been spoken so far; the notes only show what has been said.
+  const [spoken, setSpoken] = useState(reduceMotion ? total : 1);
+
+  useEffect(() => {
+    const element = rootRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return undefined;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.3 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return undefined;
+    // Hold on the finished page for a few seconds, then start the meeting over.
+    const delay = spoken >= total ? 5200 : NOTES_LINE_MS;
+    const timer = setTimeout(() => setSpoken((count) => (count >= total ? 1 : count + 1)), delay);
+    return () => clearTimeout(timer);
+  }, [inView, reduceMotion, spoken, total]);
+
+  const captured = new Set(NOTES_TRANSCRIPT.slice(0, spoken).map((line) => line.note).filter(Boolean));
+  const complete = spoken >= total;
+  const visibleLines = NOTES_TRANSCRIPT.slice(0, spoken);
+
+  return (
+    <div ref={rootRef} className="nt-panel" aria-hidden="true">
+      <div className="nt-talk">
+        <p className="nt-talk__label">
+          <span className="nt-talk__dot" /> Conversation
+          <span className="nt-talk__wave"><i /><i /><i /><i /><i /></span>
+        </p>
+        <div className="nt-talk__viewport">
+          <ul className="nt-talk__lines">
+            {visibleLines.map((line, index) => (
+              <li key={`${index}-${line.who}`} className={index === spoken - 1 ? "is-latest" : ""}>
+                <b>{line.who}</b>
+                <p>
+                  {line.mark ? (
+                    <>
+                      {line.before}
+                      <mark className={`nt-mark nt-mark--${line.tone}`}>{line.mark}</mark>
+                      {line.after}
+                    </>
+                  ) : line.text}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <span className="nt-panel__exchange" aria-hidden="true">
+          <ArrowLeftRight size={16} strokeWidth={2} />
+        </span>
+      </div>
+
+      <article className="nt-page">
+        <header className="nt-page__head">
+          <div>
+            <p className="nt-page__title">Q3 roadmap review</p>
+            <p className="nt-page__meta">Thursday · 3:17 PM · Maya, James, You</p>
+          </div>
+          <span className={`nt-page__status ${complete ? "is-done" : ""}`}>
+            {complete ? <><Check /> Notes ready</> : "Writing"}
+          </span>
+        </header>
+
+        <section className="nt-page__section">
+          <h4>Decisions</h4>
+          <ul className="nt-decisions">
+            {NOTES_DECISIONS.map((item) => (
+              <li key={item.id} className={captured.has(item.id) ? "is-in" : ""}>{item.text}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="nt-page__section">
+          <h4>Action items</h4>
+          <ul className="nt-actions">
+            {NOTES_ACTIONS.map((item) => (
+              <li key={item.id} className={captured.has(item.id) ? "is-in" : ""}>
+                <span className="nt-actions__box" />
+                <span className="nt-actions__text">{item.text}</span>
+                <span className="nt-actions__owner">{item.owner}</span>
+                <span className="nt-actions__due">{item.due}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <p className={`nt-page__summary ${complete ? "is-in" : ""}`}>
+          Launch slips a week to protect onboarding; three owners, all due before launch.
+        </p>
+      </article>
+    </div>
+  );
+};
+
+const NotesSection = ({ lead }) => (
+  <div id="notes" className="notes-section md:pt-8">
+    <div className="uc-head">
+      <h2 id="notes-title" className="price-number">
+        Notes that write <span className="uc-head__accent">themselves.</span>
+      </h2>
+      <p>{lead}</p>
+    </div>
+    <NotesTransform />
+    <ul className="nt-points">
+      {NOTES_POINTS.map((point) => (
+        <li key={point.title}>
+          <h3>{point.title}</h3>
+          <p>{point.desc}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 // Single-file, production-ready landing page inspired by the provided mockup.
 // Tailwind CSS is available in this Canvas preview.
 
@@ -655,18 +1015,677 @@ const DOWNLOAD_FILES = {
   },
 };
 
-const FOOTER_USE_CASES = [
-  { label: "AI Interview Assistant for Real-Time Interview Help", slug: "ai-interview-assistant" },
-  { label: "AI Meeting Assistant for Live Notes and Answers", slug: "ai-meeting-assistant" },
-  { label: "Real-Time Conversation Assistant for Professional Calls", slug: "real-time-conversation-assistant" },
-  { label: "AI Sales Call Assistant for Live Conversations", slug: "sales-call-assistant" },
-  { label: "Live Transcription Software with Real-Time AI", slug: "live-transcription-software" },
-  { label: "Cluely Alternative for Meetings and Interviews", slug: "cluely-alternative" },
-  { label: "FinalRound AI Alternative for Interview Support", slug: "finalround-ai-alternative" },
-  { label: "Otter.ai Alternative for Live AI Meeting Help", slug: "otter-ai-alternative" },
-  { label: "Fireflies.ai Alternative for Real-Time Meeting Assistance", slug: "fireflies-ai-alternative" },
-  { label: "Gong Alternative for Sales Call Assistance", slug: "gong-alternative" },
+// One card in the "Listen, capture, and respond wisely" grid; `kind` picks its layout and live visual.
+const BenefitCard = ({ benefit }) => {
+  const Icon = benefit.icon;
+  const text = (
+    <>
+      <h3>{benefit.title}</h3>
+      <p className="benefit-card__desc">{benefit.desc}</p>
+    </>
+  );
+
+  if (benefit.kind === "listen") {
+    return (
+      <article className="benefit-card benefit-card--listen">
+        {text}
+        <div className="benefit-live" aria-hidden="true">
+          <p className="benefit-live__status">
+            <span className="benefit-live__bars"><i /><i /><i /><i /></span>
+            Listening
+            <span className="benefit-live__time">12:08</span>
+          </p>
+          <ul className="benefit-live__lines">
+            <li><b className="is-them">Them</b>Thanks for making time today. Let’s start with the roadmap.</li>
+            <li><b className="is-you">You</b>We shipped the new onboarding flow last sprint.</li>
+            <li className="is-current"><b className="is-them">Them</b>What would you cut if we lost two engineers?</li>
+          </ul>
+        </div>
+      </article>
+    );
+  }
+
+  const header = (
+    <div className="benefit-card__top">
+      <span className="benefit-card__icon" aria-hidden="true"><Icon /></span>
+    </div>
+  );
+
+  if (benefit.kind === "insights") {
+    return (
+      <article className="benefit-card benefit-card--insights">
+        <div className="benefit-card__copy">
+          {header}
+          {text}
+        </div>
+        <div className="benefit-say" aria-hidden="true">
+          <p className="benefit-say__label"><Zap /> Say this</p>
+          <p>Protect onboarding first, then pause the reporting revamp until the team is back.</p>
+        </div>
+      </article>
+    );
+  }
+
+  return (
+    <article className={`benefit-card benefit-card--${benefit.kind}`}>
+      {header}
+      {text}
+      {benefit.kind === "understanding" ? (
+        <div className="benefit-chips" aria-hidden="true">
+          <span className="benefit-chip benefit-chip--decision">Decision</span>
+          <span className="benefit-chip benefit-chip--action">Action item</span>
+          <span className="benefit-chip benefit-chip--question">Open question</span>
+        </div>
+      ) : (
+        <div className="benefit-ask" aria-hidden="true">
+          <span>What did we agree on the timeline?</span>
+        </div>
+      )}
+    </article>
+  );
+};
+
+const MEETING_STEPS = [
+  {
+    art: "start",
+    title: "Start Introscribe",
+    desc: "Open Introscribe before your meeting and press Start Listening. It works alongside Zoom, Google Meet, and Teams.",
+  },
+  {
+    art: "end",
+    title: "End the meeting",
+    desc: "Stop the recording when the call wraps up and Introscribe processes the transcript.",
+  },
+  {
+    art: "notes",
+    title: "Get your notes",
+    desc: "Get a structured summary with decisions, action items, and a follow-up email ready to send.",
+  },
 ];
+
+const StepCursor = () => (
+  <svg className="step-art__cursor" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M6 4l20 9.5-8.6 2.4L13.6 25z" />
+  </svg>
+);
+
+const StepCallWindow = ({ className = "" }) => (
+  <div className={`step-art__window ${className}`}>
+    <div className="step-art__window-bar"><i /><i /><i /></div>
+    <div className="step-art__tiles">
+      <img src="/steps/call-left.jpg" alt="" loading="lazy" decoding="async" />
+      <img src="/steps/call-right.jpg" alt="" loading="lazy" decoding="async" />
+    </div>
+  </div>
+);
+
+// Illustrations for the "Meeting notes in 3 steps" cards, sized in container units so they scale like images.
+const StepArt = ({ art }) => {
+  if (art === "start") {
+    return (
+      <div className="step-art step-art--start" aria-hidden="true">
+        <StepCallWindow className="step-art__window--back" />
+        <div className="step-art__app">
+          <div className="step-art__app-bar">
+            <img src="/logo-b.png" alt="" className="step-art__app-logo" />
+            <span className="step-art__start">
+              <Mic /> Start Listening
+              <StepCursor />
+            </span>
+          </div>
+          <div className="step-art__app-body"><i /><i /><i /></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (art === "end") {
+    return (
+      <div className="step-art step-art--end" aria-hidden="true">
+        <StepCallWindow />
+        <div className="step-art__bar">
+          <span className="step-art__bar-icon"><HatGlasses /></span>
+          <span className="step-art__bar-pill"><span className="step-art__rec" /> Recording</span>
+          <span className="step-art__bar-divider" />
+          <span className="step-art__bar-stop">
+            <i />
+            <StepCursor />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="step-art step-art--notes" aria-hidden="true">
+      <div className="step-art__doc">
+        <p className="step-art__doc-title">Q3 Planning Sync</p>
+        <div className="step-art__doc-meta">
+          <i />
+          <span className="step-art__chip"><Mail /> Email follow-up</span>
+        </div>
+        <p className="step-art__doc-label">Meeting notes</p>
+        <p className="step-art__doc-heading">Key decisions</p>
+        <div className="step-art__lines"><i /><i /><i /><b /><i /><i /><i /><b /><i /></div>
+      </div>
+    </div>
+  );
+};
+
+// Minimal top bar shared by the legal pages and the article (Compare / Resources / Use cases) pages.
+const SubpageBar = ({ baseUrl, dark, onToggleTheme }) => (
+  <header className="legal-bar">
+    <div className="legal-wrap legal-bar__inner">
+      <a href={baseUrl} aria-label="Introscribe home" className="legal-bar__brand">
+        <img src="/logo-b.png" alt="introscribe" className="legal-bar__logo legal-bar__logo--light" decoding="async" />
+        <img src="/logo-w.png" alt="" className="legal-bar__logo legal-bar__logo--dark" decoding="async" aria-hidden="true" />
+      </a>
+      <div className="legal-bar__actions">
+        <a href={baseUrl} className="legal-bar__back">
+          <ArrowRight aria-hidden="true" /> Back to home
+        </a>
+        <button type="button" className="legal-bar__theme" aria-label="Toggle dark mode" onClick={onToggleTheme}>
+          {dark ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
+        </button>
+      </div>
+    </div>
+  </header>
+);
+
+const articleCategory = (slug) =>
+  slug.startsWith("blog/") ? "Resources" : slug.endsWith("-alternative") ? "Compare" : "Use cases";
+
+const articleReadMinutes = (page) => {
+  const text = [page.intro, ...page.sections.map((s) => `${s.heading} ${s.body}`), ...page.faqs.map((f) => `${f.q} ${f.a}`)].join(" ");
+  return Math.max(1, Math.round(text.split(/\s+/).length / 200));
+};
+
+const ARTICLE_FADE_OUT_MS = 220;
+const ARTICLE_FADE_IN_MS = 620;
+
+// Article layout for the SEO content pages. Stays mounted across article switches so they can cross-fade.
+const ArticlePage = ({ page, pages, baseUrl, dark, onToggleTheme, onNavigate, actions }) => {
+  const rootRef = useRef(null);
+  const timersRef = useRef([]);
+  const [phase, setPhase] = useState("in");
+  const category = articleCategory(page.slug);
+  const related = pages.filter((other) => other.slug !== page.slug && articleCategory(other.slug) === category).slice(0, 3);
+
+  useEffect(() => {
+    timersRef.current.push(setTimeout(() => setPhase("idle"), ARTICLE_FADE_IN_MS + 200));
+    return () => timersRef.current.forEach(clearTimeout);
+  }, []);
+
+  // Reveal the lower blocks as they scroll into view.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return undefined;
+    const blocks = Array.from(root.querySelectorAll("[data-article-reveal]"));
+    blocks.forEach((block) => block.classList.remove("is-visible"));
+    if (typeof IntersectionObserver === "undefined") {
+      blocks.forEach((block) => block.classList.add("is-visible"));
+      return undefined;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }),
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+    blocks.forEach((block) => observer.observe(block));
+    return () => observer.disconnect();
+  }, [page.slug]);
+
+  const openArticle = (event, slug) => {
+    event.preventDefault();
+    if (phase === "out") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) {
+      onNavigate(slug);
+      window.scrollTo(0, 0);
+      return;
+    }
+    setPhase("out");
+    timersRef.current.push(
+      setTimeout(() => {
+        onNavigate(slug);
+        window.scrollTo({ top: 0, behavior: "instant" });
+        setPhase("in");
+        timersRef.current.push(setTimeout(() => setPhase("idle"), ARTICLE_FADE_IN_MS + 200));
+      }, ARTICLE_FADE_OUT_MS)
+    );
+  };
+
+  return (
+    <div className="legal article" ref={rootRef}>
+      <SubpageBar baseUrl={baseUrl} dark={dark} onToggleTheme={onToggleTheme} />
+
+      <main key={page.slug} className={`legal-wrap article-doc article-doc--${phase}`}>
+        <section className="article-hero">
+          <p className="article-hero__meta">
+            <span>{category}</span>
+            <i aria-hidden="true" />
+            {articleReadMinutes(page)} min read
+          </p>
+          <h1>{page.h1}</h1>
+          <p className="article-hero__intro">{page.intro}</p>
+          <div className="article-hero__actions">{actions}</div>
+        </section>
+
+        <section className="article-points" aria-label="Key points">
+          {page.sections.map((section) => (
+            <div key={section.heading}>
+              <h2>{section.heading}</h2>
+              <p>{section.body}</p>
+            </div>
+          ))}
+        </section>
+
+        <div className="article-body">
+          <section className="article-block" data-article-reveal aria-labelledby="article-faq-title">
+            <h2 id="article-faq-title">Common questions</h2>
+            <dl className="article-faq">
+              {page.faqs.map((faq) => (
+                <div key={faq.q}>
+                  <dt>{faq.q}</dt>
+                  <dd>{faq.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section className="article-block" data-article-reveal aria-labelledby="article-topics-title">
+            <h2 id="article-topics-title">Related topics</h2>
+            <ul className="article-topics">
+              {page.relatedKeywords.map((keyword) => (
+                <li key={keyword}>{keyword.replace(/-/g, " ")}</li>
+              ))}
+            </ul>
+          </section>
+
+          {related.length ? (
+            <section className="article-block" data-article-reveal aria-labelledby="article-more-title">
+              <h2 id="article-more-title">More in {category}</h2>
+              <ul className="article-more">
+                {related.map((other) => (
+                  <li key={other.slug}>
+                    <a href={`${baseUrl}${other.slug}`} onClick={(event) => openArticle(event, other.slug)}>
+                      <span>{other.h1}</span>
+                      <ArrowRight aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          <section className="article-cta" data-article-reveal>
+            <h2>Use Introscribe in your next live conversation</h2>
+            <p>Download the desktop app for real-time transcription, meeting notes, interview support, and contextual AI answers.</p>
+            <div className="article-hero__actions">{actions}</div>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const legalSectionId = (title) =>
+  title.includes("Cookies") ? "cookies" : title.toLowerCase().replace(/^\d+\.\s*/, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+const legalSectionLabel = (title) => title.replace(/^\d+\.\s*/, "");
+
+// Shared layout for the Privacy Policy and Terms of Service pages.
+const LEGAL_FADE_OUT_MS = 220;
+const LEGAL_FADE_IN_MS = 520;
+
+const LegalPage = ({ kind, doc, baseUrl, dark, onToggleTheme, onNavigate }) => {
+  const { title, intro, updated, highlights, sections, faqs, faqTitle, contact } = doc;
+  const [activeId, setActiveId] = useState(() => legalSectionId(sections[0].title));
+  // "out" fades the current document away, "in" brings the new one in; the tab pill moves immediately.
+  const [phase, setPhase] = useState("idle");
+  const [selected, setSelected] = useState(kind);
+  const timersRef = useRef([]);
+
+  useEffect(() => setSelected(kind), [kind]);
+  useEffect(() => () => timersRef.current.forEach(clearTimeout), []);
+
+  const switchTo = (event, target) => {
+    event.preventDefault();
+    if (target === kind || phase === "out") return;
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    setSelected(target);
+    if (reduceMotion) {
+      onNavigate(target);
+      window.scrollTo(0, 0);
+      return;
+    }
+    setPhase("out");
+    timersRef.current.push(
+      setTimeout(() => {
+        onNavigate(target);
+        if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "instant" });
+        setPhase("in");
+        timersRef.current.push(setTimeout(() => setPhase("idle"), LEGAL_FADE_IN_MS));
+      }, LEGAL_FADE_OUT_MS)
+    );
+  };
+
+  // The page renders after the browser handles the URL hash, so jump to it once content exists.
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const target = document.getElementById(decodeURIComponent(hash));
+    if (target) requestAnimationFrame(() => target.scrollIntoView());
+  }, []);
+
+  // Highlight the contents entry for the section currently being read.
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return undefined;
+    const elements = sections.map((section) => document.getElementById(legalSectionId(section.title))).filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: "-15% 0px -70% 0px" }
+    );
+    setActiveId(legalSectionId(sections[0].title));
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [sections]);
+
+  const contents = (
+    <ol className="legal-toc__list">
+      {sections.map((section, index) => {
+        const id = legalSectionId(section.title);
+        return (
+          <li key={id}>
+            <a href={`#${id}`} className={activeId === id ? "is-active" : ""}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              {legalSectionLabel(section.title)}
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  );
+
+  return (
+    <div className="legal">
+      <SubpageBar baseUrl={baseUrl} dark={dark} onToggleTheme={onToggleTheme} />
+
+      <main className="legal-wrap">
+        <section className="legal-hero">
+          <nav className={`legal-switch legal-switch--${selected}`} aria-label="Legal documents">
+            <span className="legal-switch__pill" aria-hidden="true" />
+            <a
+              href={`${baseUrl}privacy`}
+              className={selected === "privacy" ? "is-active" : ""}
+              aria-current={kind === "privacy" ? "page" : undefined}
+              onClick={(event) => switchTo(event, "privacy")}
+            >
+              Privacy Policy
+            </a>
+            <a
+              href={`${baseUrl}terms`}
+              className={selected === "terms" ? "is-active" : ""}
+              aria-current={kind === "terms" ? "page" : undefined}
+              onClick={(event) => switchTo(event, "terms")}
+            >
+              Terms of Service
+            </a>
+          </nav>
+        </section>
+
+        <div className={`legal-doc legal-doc--${phase}`}>
+          <section className="legal-hero legal-hero--doc">
+            <h1>{title}</h1>
+            <p className="legal-hero__updated">Last updated {updated}</p>
+            <p className="legal-hero__intro">{intro}</p>
+          </section>
+
+          <section className="legal-glance" aria-label="At a glance">
+            {highlights.map((item) => (
+              <div key={item.title}>
+                <h2>{item.title}</h2>
+                <p>{item.body}</p>
+              </div>
+            ))}
+          </section>
+
+          <div className="legal-body">
+            <aside className="legal-toc" aria-label="On this page">
+              <p className="legal-toc__label">On this page</p>
+              {contents}
+            </aside>
+
+            <details className="legal-toc-mobile">
+              <summary>
+                On this page
+                <ChevronDown aria-hidden="true" />
+              </summary>
+              {contents}
+            </details>
+
+            <div className="legal-content">
+              {sections.map((section, index) => (
+                <section key={section.title} id={legalSectionId(section.title)} className="legal-section">
+                  <h2>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    {legalSectionLabel(section.title)}
+                  </h2>
+                  <div className="legal-section__body">{section.body}</div>
+                </section>
+              ))}
+
+              <section className="legal-faq" aria-labelledby={`${kind}-faq-title`}>
+                <h2 id={`${kind}-faq-title`}>{faqTitle}</h2>
+                <dl>
+                  {faqs.map((faq) => (
+                    <div key={faq.q}>
+                      <dt>{faq.q}</dt>
+                      <dd>{faq.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+
+              <section className="legal-contact">
+                <h2>{contact.title}</h2>
+                <p>{contact.body}</p>
+                <a href="mailto:support@introscribe.com" className="legal-contact__link">
+                  support@introscribe.com
+                  <ArrowRight aria-hidden="true" />
+                </a>
+              </section>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const COOKIE_CATEGORIES = [
+  {
+    key: "essential",
+    title: "Essential",
+    body: "Required for core site behavior, security, and remembering your theme.",
+    locked: true,
+  },
+  {
+    key: "analytics",
+    title: "Analytics",
+    body: "Helps us understand aggregate site usage and improve page performance.",
+  },
+  {
+    key: "product",
+    title: "Product updates",
+    body: "Remembers lightweight preferences for product announcements and onboarding.",
+  },
+];
+
+const COOKIE_EXIT_MS = 220;
+
+// Cookie preferences sheet. Keeps its own draft so toggles don't re-render the page.
+const CookieSettings = ({ initial, onSave, onClose, privacyHref, onOpenPrivacy }) => {
+  const cardRef = useRef(null);
+  const [draft, setDraft] = useState(() => ({ analytics: false, product: false, ...initial, essential: true }));
+  const [closing, setClosing] = useState(false);
+
+  const finish = (after) => {
+    if (closing) return;
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    setClosing(true);
+    setTimeout(after, reduceMotion ? 0 : COOKIE_EXIT_MS);
+  };
+  const close = () => finish(onClose);
+  const save = (preferences) => finish(() => onSave(preferences));
+
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    cardRef.current?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") close();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className={`cookie-sheet ${closing ? "is-closing" : ""}`} role="dialog" aria-modal="true" aria-labelledby="cookie-sheet-title">
+      <button type="button" className="cookie-sheet__backdrop" aria-label="Close cookie settings" onClick={close} />
+      <div className="cookie-sheet__card" ref={cardRef} tabIndex={-1}>
+        <div className="cookie-sheet__grip" aria-hidden="true" />
+        <header className="cookie-sheet__head">
+          <div>
+            <h2 id="cookie-sheet-title">Cookie settings</h2>
+            <p>Choose which optional cookies Introscribe can use on this website. You can change this anytime.</p>
+          </div>
+          <button type="button" className="cookie-sheet__close" aria-label="Close cookie settings" onClick={close}>
+            <X aria-hidden="true" />
+          </button>
+        </header>
+
+        <ul className="cookie-sheet__list">
+          {COOKIE_CATEGORIES.map((category) => {
+            const on = Boolean(draft[category.key]);
+            const id = `cookie-${category.key}`;
+            return (
+              <li key={category.key}>
+                <div className="cookie-sheet__text">
+                  <label htmlFor={id}>
+                    {category.title}
+                    {category.locked ? <span className="cookie-sheet__badge">Always on</span> : null}
+                  </label>
+                  <p id={`${id}-desc`}>{category.body}</p>
+                </div>
+                <button
+                  type="button"
+                  id={id}
+                  role="switch"
+                  aria-checked={on}
+                  aria-describedby={`${id}-desc`}
+                  disabled={category.locked}
+                  className={`cookie-switch ${on ? "is-on" : ""}`}
+                  onClick={() => setDraft((current) => ({ ...current, [category.key]: !current[category.key] }))}
+                >
+                  <span aria-hidden="true" />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="cookie-sheet__actions">
+          <button type="button" className="cookie-sheet__save" onClick={() => save(draft)}>
+            Save preferences
+          </button>
+          <div className="cookie-sheet__quick">
+            <button type="button" onClick={() => save({ essential: true, analytics: false, product: false })}>Reject optional</button>
+            <button type="button" onClick={() => save({ essential: true, analytics: true, product: true })}>Accept all</button>
+          </div>
+        </div>
+
+        <p className="cookie-sheet__foot">
+          Learn more in our{" "}
+          <a
+            href={privacyHref}
+            onClick={(event) => {
+              event.preventDefault();
+              finish(onOpenPrivacy);
+            }}
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const FOOTER_COLUMNS = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", path: "#how" },
+      { label: "How it works", path: "#how-it-works" },
+      { label: "Pricing", path: "#pricing" },
+      { label: "FAQ", path: "#faq" },
+      { label: "Download", path: "download" },
+    ],
+  },
+  {
+    title: "Use cases",
+    links: [
+      { label: "Job interviews", path: "ai-interview-assistant" },
+      { label: "Meetings", path: "ai-meeting-assistant" },
+      { label: "Sales calls", path: "sales-call-assistant" },
+      { label: "Professional calls", path: "real-time-conversation-assistant" },
+      { label: "Live transcription", path: "live-transcription-software" },
+    ],
+  },
+  {
+    title: "Compare",
+    links: [
+      { label: "Cluely alternative", path: "cluely-alternative" },
+      { label: "Final Round AI alternative", path: "finalround-ai-alternative" },
+      { label: "Otter.ai alternative", path: "otter-ai-alternative" },
+      { label: "Fireflies.ai alternative", path: "fireflies-ai-alternative" },
+      { label: "Gong alternative", path: "gong-alternative" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Using AI in interviews", path: "blog/how-to-use-ai-in-interviews" },
+      { label: "Technical interviews", path: "blog/how-to-pass-technical-interviews" },
+      { label: "System design prep", path: "blog/how-to-prepare-for-system-design-interviews" },
+      { label: "Behavioral questions", path: "blog/how-to-answer-behavioral-interview-questions" },
+      { label: "Best AI meeting assistant", path: "blog/best-ai-meeting-assistant" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "Contact us", href: "mailto:support@introscribe.com" },
+      { label: "Support", href: "mailto:support@introscribe.com" },
+      { label: "Privacy Policy", path: "privacy" },
+      { label: "Terms of Service", path: "terms" },
+    ],
+  },
+];
+
 
 export default function introscribeLanding() {
   const baseUrl = (import.meta?.env?.BASE_URL ?? '/').replace(/\/?$/, '/');
@@ -734,12 +1753,12 @@ export default function introscribeLanding() {
   const privacyDemoPlayedRef = useRef(false);
   const featureOverlayStageRef = useRef(null);
   const transcriptionOverlayStageRef = useRef(null);
-  const archOverlayStageRef = useRef(null);
   const monthlyBtnRef = useRef(null);
   const yearlyBtnRef = useRef(null);
   const indicatorRef = useRef(null);
   const [os, setOs] = useState(() => detectPlatform());
   const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const desktopModalRef = useRef(null);
   const [shareStatus, setShareStatus] = useState("");
   const [showCookieSettings, setShowCookieSettings] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState(() => {
@@ -753,31 +1772,19 @@ export default function introscribeLanding() {
   });
   const isMobile = os === "ios" || os === "android";
 
-  // Resize & position billing toggle indicator to match active button
+  // Slide the billing toggle indicator under the active option
   useEffect(() => {
-    const activeEl = yearly ? yearlyBtnRef.current : monthlyBtnRef.current;
-    const indicator = indicatorRef.current;
-    if (!activeEl || !indicator) return;
-    const { offsetLeft, offsetWidth } = activeEl;
-    // Adjust for parent padding (4px left) if needed
-    indicator.style.left = `${offsetLeft + 4}px`;
-    indicator.style.width = `${offsetWidth - 8}px`; // minus horizontal padding space
-  }, [yearly]);
-
-  // Recalculate on window resize for responsiveness
-  useEffect(() => {
-    const handleResize = () => {
+    const place = () => {
       const activeEl = yearly ? yearlyBtnRef.current : monthlyBtnRef.current;
       const indicator = indicatorRef.current;
       if (!activeEl || !indicator) return;
-      const { offsetLeft, offsetWidth } = activeEl;
-      indicator.style.left = `${offsetLeft + 4}px`;
-      indicator.style.width = `${offsetWidth - 8}px`;
+      indicator.style.left = `${activeEl.offsetLeft}px`;
+      indicator.style.width = `${activeEl.offsetWidth}px`;
     };
-    window.addEventListener('resize', handleResize);
-    // Initial measure (in case first render sizes differ after fonts load)
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
+    place();
+    window.addEventListener("resize", place);
+    document.fonts?.ready?.then(place);
+    return () => window.removeEventListener("resize", place);
   }, [yearly]);
 
   useEffect(() => {
@@ -859,6 +1866,37 @@ export default function introscribeLanding() {
   }, []);
 
   const [openFAQ, setOpenFAQ] = useState(0);
+  const [openFooterColumn, setOpenFooterColumn] = useState(null);
+  const heroRef = useRef(null);
+  const [heroPassed, setHeroPassed] = useState(false);
+  const [routePath, setRoutePath] = useState(() => (typeof window !== "undefined" ? window.location.pathname : "/"));
+
+  useEffect(() => {
+    const handlePopState = () => setRoutePath(window.location.pathname);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Floating download button: appears once the hero's own download button has scrolled out of view above.
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || typeof IntersectionObserver === "undefined") {
+      setHeroPassed(false);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroPassed(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [routePath]);
+
+  // Client-side navigation between pages that share a layout (the legal documents).
+  const navigateTo = (path) => {
+    if (typeof window === "undefined" || window.location.pathname === path) return;
+    window.history.pushState({}, "", path);
+    setRoutePath(path);
+  };
 
   const handlePrivacySplitChange = (event) => {
     if (privacyAnimationRef.current) {
@@ -889,6 +1927,28 @@ export default function introscribeLanding() {
     setShareStatus("");
     setShowDesktopModal(true);
   };
+
+  const closeDesktopPrompt = () => {
+    setShowDesktopModal(false);
+    setShareStatus("");
+  };
+
+  useEffect(() => {
+    if (!showDesktopModal) return undefined;
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    desktopModalRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") closeDesktopPrompt();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus?.();
+    };
+  }, [showDesktopModal]);
 
   const handleCopyDesktopLink = async () => {
     if (typeof navigator === "undefined" || !navigator.clipboard) {
@@ -932,112 +1992,12 @@ export default function introscribeLanding() {
     </div>
   );
 
-  const CookieSettingsModal = () => (
-    <div className="cookie-settings-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title">
-      <button
-        type="button"
-        className="cookie-settings-modal__backdrop"
-        aria-label="Close cookie settings"
-        onClick={() => setShowCookieSettings(false)}
-      ></button>
-      <div className="cookie-settings-modal__card">
-        <div className="cookie-settings-modal__header">
-          <span className="cookie-settings-modal__icon" aria-hidden="true">
-            <Cookie />
-          </span>
-          <div>
-            <p className="cookie-settings-modal__eyebrow">Privacy controls</p>
-            <h2 id="cookie-settings-title">Cookie Settings</h2>
-          </div>
-          <button
-            type="button"
-            className="cookie-settings-modal__close"
-            aria-label="Close cookie settings"
-            onClick={() => setShowCookieSettings(false)}
-          >
-            <X aria-hidden="true" />
-          </button>
-        </div>
-
-        <p className="cookie-settings-modal__lead">
-          Choose which optional cookies and local storage entries Introscribe can use on this website.
-        </p>
-
-        <div className="cookie-settings-list">
-          <div className="cookie-settings-row">
-            <div>
-              <h3>Essential</h3>
-              <p>Required for core site behavior, authentication, security, and remembering your theme.</p>
-            </div>
-            <span className="cookie-settings-required">Always on</span>
-          </div>
-
-          {[
-            {
-              key: "analytics",
-              title: "Analytics",
-              body: "Helps us understand aggregate site usage and improve page performance.",
-            },
-            {
-              key: "product",
-              title: "Product updates",
-              body: "Allows us to remember lightweight preferences for product announcements and onboarding.",
-            },
-          ].map((item) => (
-            <label key={item.key} className="cookie-settings-row cookie-settings-row--toggle">
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </div>
-              <input
-                type="checkbox"
-                checked={Boolean(cookiePreferences[item.key])}
-                onChange={(event) => {
-                  const checked = event.target.checked;
-                  setCookiePreferences((preferences) => ({
-                    ...preferences,
-                    [item.key]: checked,
-                  }));
-                }}
-              />
-              <span className="cookie-settings-switch" aria-hidden="true"></span>
-            </label>
-          ))}
-        </div>
-
-        <div className="cookie-settings-actions">
-          <button
-            type="button"
-            className="cookie-settings-action cookie-settings-action--ghost"
-            onClick={() => persistCookiePreferences({ essential: true, analytics: false, product: false })}
-          >
-            Reject optional
-          </button>
-          <button
-            type="button"
-            className="cookie-settings-action cookie-settings-action--ghost"
-            onClick={() => persistCookiePreferences({ essential: true, analytics: true, product: true })}
-          >
-            Accept all
-          </button>
-          <button
-            type="button"
-            className="cookie-settings-action"
-            onClick={() => persistCookiePreferences(cookiePreferences)}
-          >
-            Save choices
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   const normalizePath = (value) => {
     const normalized = value.replace(/\/$/, "");
     return normalized === "" ? "/" : normalized;
   };
 
-  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const currentPath = routePath;
   const normalizedBase = normalizePath(baseUrl);
   const normalizedPath = normalizePath(currentPath);
   const currentSlug = (() => {
@@ -1052,6 +2012,7 @@ export default function introscribeLanding() {
   const isDownloadPage = currentSlug === "download";
   const activeSeoPage = currentSlug && !isPrivacyPage && !isTermsPage && !isDownloadPage ? seoPagesBySlug[currentSlug] : null;
   const showNotFound = Boolean(currentSlug && !isPrivacyPage && !isTermsPage && !isDownloadPage && !activeSeoPage);
+  const isLandingPage = !currentSlug;
   const privacySeo = {
     title: "Privacy Policy | Introscribe",
     description:
@@ -1104,17 +2065,22 @@ export default function introscribeLanding() {
 
       const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
       const selectors = [
-        "#benefits > h2",
-        "#benefits > p",
-        ".benefit-glass",
+        ".benefits-head",
+        ".benefit-card",
+        ".uc-head",
+        ".uc-body",
+        ".nt-panel",
+        ".nt-points li",
+        ".steps-head",
+        ".step-card",
         "#how > div > div > .mx-auto:first-child",
         ".privacy-preview-column",
-        ".ask-clarify-preview-card",
         ".feature-overlay-preview-stage",
         ".transcription-stats",
         ".transcription-stat-row",
-        "#pricing > .text-center",
-        ".pricing-card",
+        ".pricing-head",
+        ".plan-card",
+        ".plans-includes",
         "#faq > h3",
         "#faq > div > div",
       ].join(",");
@@ -1218,94 +2184,68 @@ export default function introscribeLanding() {
   );
 
   const Footer = () => (
-    <footer className="footer-shell">
-      <div className="footer-giant-logo" aria-hidden="true">
-        <img src="/logo-b.png" alt="" className="footer-giant-logo__light" decoding="async" />
-        <img src="/logo-w.png" alt="" className="footer-giant-logo__dark" decoding="async" />
-      </div>
-
-      <div className="footer-card">
-        <div className="footer-main-grid">
-          <div className="footer-brand-block">
-            <a href={baseUrl} aria-label="Go to landing page" className="footer-brand-link">
-              <img
-                src="/logo-b.png"
-                alt="introscribe logo"
-                className="footer-brand-logo footer-brand-logo__light"
-                decoding="async"
-              />
-              <img
-                src="/logo-w.png"
-                alt="introscribe logo (dark)"
-                className="footer-brand-logo footer-brand-logo__dark"
-                decoding="async"
-                aria-hidden="true"
-              />
-            </a>
-            <p className="footer-brand-copy">
-              AI meeting companion that records, transcribes, and turns live conversations into clear outcomes.
-            </p>
-            <a href="mailto:support@introscribe.com" className="footer-contact-link">
-              Contact us
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </div>
-
-          <div>
-            <h2 className="footer-heading">Product</h2>
-            <ul className="footer-link-list">
-              <li><a href={`${baseUrl}#benefits`}>Overview</a></li>
-              <li><a href={`${baseUrl}#pricing`}>Pricing</a></li>
-              <li><a href={`${baseUrl}#faq`}>FAQ</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="footer-heading">Resources</h2>
-            <ul className="footer-link-list">
-              <li><a href={`${baseUrl}#benefits`}>Features</a></li>
-              <li><a href={`${baseUrl}#how`}>Use Cases</a></li>
-              <li><a href={`${baseUrl}#pricing`}>Plans</a></li>
-              <li><a href="mailto:support@introscribe.com">Support</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="footer-heading">Company</h2>
-            <ul className="footer-link-list">
-              <li><a href="mailto:support@introscribe.com">Contact</a></li>
-              <li><a href={`${baseUrl}download`}>Download</a></li>
-              <li><a href={`${baseUrl}#pricing`}>Pricing</a></li>
-            </ul>
-          </div>
-
-          <div className="sr-only">
-            <h2 className="footer-heading">Use Cases</h2>
-            <ul className="footer-link-list">
-              {FOOTER_USE_CASES.map((item) => (
-                <li key={item.slug}>
-                  <a href={`${baseUrl}${item.slug}`}>{item.label}</a>
-                </li>
-              ))}
-            </ul>
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div className="site-footer__top">
+          <a href={baseUrl} aria-label="Introscribe home" className="site-footer__brand">
+            <img src="/logo-b.png" alt="introscribe" className="site-footer__logo site-footer__logo--light" decoding="async" />
+            <img src="/logo-w.png" alt="" className="site-footer__logo site-footer__logo--dark" decoding="async" aria-hidden="true" />
+          </a>
+          <div className="site-footer__note">
+            <p>Introscribe is a desktop app for macOS and Windows built for conversations where it helps to listen closely and keep the details. It brings live transcription, in-the-moment assistance, and organized notes into one place, so you can follow a discussion as it unfolds and return to its most useful moments later. Whether you are joining a meeting, preparing for an interview, speaking with a customer, or learning from a training session, Introscribe helps you stay focused on the people in front of you while keeping a record of what was said.</p>
+            <p>During a conversation, live transcription makes spoken information easier to follow. Introscribe can help surface relevant points while the discussion is still happening, giving you more context when you need to respond or ask a better question. After the conversation, it can turn a long exchange into structured notes that are easier to scan than a raw transcript. Key topics, decisions, action items, and follow-ups can be brought together so the next step is clearer.</p>
+            <p>Use those notes to review a detail you missed, prepare a recap, or pick up where a previous conversation left off. In interviews, they can help you revisit a question or an answer. In meetings and sales calls, they can make it easier to track commitments and understand what needs attention next. In lectures and training sessions, they can help you return to important ideas without searching through an entire conversation from the beginning.</p>
+            <p>Introscribe is meant to support your judgment and your workflow. Transcripts and generated notes can miss context or contain mistakes, especially when audio is unclear, people speak over one another, or specialized terms are used. Review important details before sharing a recap, making a decision, or relying on a suggested follow-up. You remain responsible for how you use the information from each conversation.</p>
+            <p>Introscribe is available as a desktop download for supported macOS and Windows computers. The mobile website helps you learn about the app and send yourself a link to open on your computer. Before recording or transcribing a conversation, make sure your use is appropriate for the people involved and follow the laws and consent requirements that apply where you are.</p>
           </div>
         </div>
 
-        <div className="footer-bottom-row">
-          <p>© {new Date().getFullYear()} Introscribe. All rights reserved.</p>
-          <div className="footer-legal-links">
-            <a href={`${baseUrl}privacy`}>Privacy Policy</a>
-            <a href={`${baseUrl}terms`}>Terms of Service</a>
-            <a
-              href={`${baseUrl}privacy#cookies`}
-              onClick={(event) => {
-                event.preventDefault();
-                setShowCookieSettings(true);
-              }}
-            >
-              Cookie Settings
-            </a>
-          </div>
+        <nav className="site-footer__columns" aria-label="Footer">
+          {FOOTER_COLUMNS.map((column) => {
+            const open = openFooterColumn === column.title;
+            const listId = `footer-col-${column.title.toLowerCase().replace(/\s+/g, "-")}`;
+            return (
+              <div key={column.title} className={`site-footer__column ${open ? "is-open" : ""}`}>
+                <h2>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={listId}
+                    onClick={() => setOpenFooterColumn((current) => (current === column.title ? null : column.title))}
+                  >
+                    {column.title}
+                    <ChevronDown aria-hidden="true" />
+                  </button>
+                </h2>
+                <ul id={listId}>
+                  {column.links.map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href ?? `${baseUrl}${link.path}`}>{link.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="site-footer__bottom">
+          <p>Copyright © {new Date().getFullYear()} Introscribe. All rights reserved.</p>
+          <ul className="site-footer__legal">
+            <li><a href={`${baseUrl}privacy`}>Privacy Policy</a></li>
+            <li><a href={`${baseUrl}terms`}>Terms of Service</a></li>
+            <li>
+              <a
+                href={`${baseUrl}privacy#cookies`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setShowCookieSettings(true);
+                }}
+              >
+                Cookie Settings
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </footer>
@@ -1324,9 +2264,9 @@ export default function introscribeLanding() {
     {
       icon: Sparkles,
       tag: "Notes",
-      title: "Smart AI Note‑Taking",
+      title: "Notes that write themselves.",
       desc:
-        "Skip the scribbling. Introscribe listens in the background and turns messy conversations into clean, structured notes — decisions, action items, and key moments captured the moment they happen, so you leave every call with a ready‑to‑share recap.",
+        "Introscribe listens in the background and turns messy conversations into clean, structured notes, so you leave every call with a recap that's ready to share.",
       img: "answers",
     },
     {
@@ -1358,24 +2298,28 @@ export default function introscribeLanding() {
 
   const benefits = [
     {
+      kind: "listen",
       icon: Mic,
-      title: "Live Transcription",
-      desc: "Converts speech to text with millisecond accuracy so nothing important is lost.",
+      title: "Live transcription",
+      desc: "Turns speech into text as it’s spoken, so nothing important gets lost.",
     },
     {
+      kind: "understanding",
       icon: Zap,
-      title: "Smart Understanding",
-      desc: "Detects topics, key points, and actionable tasks automatically while you talk.",
+      title: "Smart understanding",
+      desc: "Picks out topics, key points, and action items automatically while you talk.",
     },
     {
-      icon: MessageCircle,
-      title: "Conversational Queries",
-      desc: "Ask questions directly from your transcript and get instant contextual answers.",
+      kind: "queries",
+      icon: MessageSquareText,
+      title: "Conversational queries",
+      desc: "Ask questions about your transcript and get answers grounded in what was actually said.",
     },
     {
+      kind: "insights",
       icon: Clock10,
-      title: "Real-Time Insights",
-      desc: "Receive prompts and suggestions live to guide meetings and decisions.",
+      title: "Real-time insights",
+      desc: "Get prompts and suggestions live, right when you need them, to steer meetings and decisions.",
     },
   ];
 
@@ -1383,6 +2327,7 @@ export default function introscribeLanding() {
     {
       name: "Free Plan",
       slug: "free",
+      tagline: "Try Introscribe on your next few calls.",
       priceM: 0,
       priceY: 0,
       bullets: [
@@ -1397,6 +2342,7 @@ export default function introscribeLanding() {
     {
       name: "Plus Plan",
       slug: "plus",
+      tagline: "For people who live in meetings and interviews.",
       priceM: 11.99,
       priceY: 9.59, // monthly * 0.8 with 20% annual discount (billed yearly)
       bullets: [
@@ -1407,11 +2353,12 @@ export default function introscribeLanding() {
         "Priority support",
       ],
       cta: "Get started",
-      highlight: true,
+      highlight: false,
     },
     {
       name: "Pro Plan",
       slug: "pro",
+      tagline: "For calls where discretion matters most.",
       priceM: 20.99,
       priceY: 16.79, // monthly * 0.8 with 20% annual discount (billed yearly)
       bullets: [
@@ -1419,7 +2366,7 @@ export default function introscribeLanding() {
         "Completely hidden from meeting screen-sharing software",
       ],
       cta: "Book a Call",
-      highlight: false,
+      highlight: true,
     },
   ];
 
@@ -1453,22 +2400,6 @@ export default function introscribeLanding() {
       a: "You retain full ownership. Deletions cascade to derived summaries & embeddings within 30 minutes.",
     },
   ];
-
-  const Price = ({ amount }) => {
-    const formatted = Number(amount).toFixed(2);
-    return (
-      <div className="flex items-baseline gap-2">
-        {amount === 0 ? (
-          <span className="price-number text-lg font-semibold">Free</span>
-        ) : (
-          <>
-            <span className="price-number">${formatted}</span>
-            <span className="price-cycle">/ month</span>
-          </>
-        )}
-      </div>
-    );
-  };
 
   const downloadOptions = os === "mac"
     ? [
@@ -1581,118 +2512,6 @@ export default function introscribeLanding() {
       </main>
     );
   };
-
-  const SeoCardIcon = ({ heading }) => {
-    const text = heading.toLowerCase();
-    const Icon = text.includes("transcription") || text.includes("speech") || text.includes("transcript")
-      ? Mic
-      : text.includes("meeting") || text.includes("call") || text.includes("conversation")
-        ? MessageSquareText
-        : text.includes("interview") || text.includes("behavioral") || text.includes("technical") || text.includes("roles")
-          ? BriefcaseBusiness
-          : text.includes("workflow") || text.includes("support") || text.includes("prepare") || text.includes("preparation")
-            ? Route
-            : text.includes("context") || text.includes("notes") || text.includes("capture")
-              ? FileText
-              : text.includes("tradeoff") || text.includes("structure") || text.includes("requirements")
-                ? Layers
-                : text.includes("answer") || text.includes("respond") || text.includes("objection")
-                  ? Target
-                  : text.includes("desktop") || text.includes("platform") || text.includes("stack")
-                    ? Monitor
-                    : BookOpen;
-
-    return (
-      <span className="seo-card-icon" aria-hidden="true">
-        <Icon />
-      </span>
-    );
-  };
-
-  const SeoContentPage = ({ page }) => (
-    <main className="seo-page">
-      <section className="seo-download-hero">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <p className="seo-eyebrow">Introscribe AI Assistant</p>
-            <h1 className="text-balance">{page.h1}</h1>
-            <p className="seo-intro">{page.intro}</p>
-            <div className="seo-actions">
-              {isMobile ? (
-                <DesktopRequiredCTA tone="light" />
-              ) : (
-                downloadOptions.map((opt) => (
-                  <a
-                    key={opt.label}
-                    href={opt.href}
-                    className="seo-download-button"
-                  >
-                    <DownloadPlatformIcon platform={opt.platform} />
-                    {opt.label}
-                  </a>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-12 md:grid-cols-3">
-        {page.sections.map((section) => (
-          <article key={section.heading} className="seo-card">
-            <h2>
-              <SeoCardIcon heading={section.heading} />
-              <span>{section.heading}</span>
-            </h2>
-            <p>{section.body}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="seo-split">
-          <div>
-            <p className="seo-eyebrow">Search intent coverage</p>
-            <h2>Related ways people search for this</h2>
-            <p>
-              This page is written around one clear topic, with related phrases grouped naturally instead of stuffed into hidden metadata.
-            </p>
-          </div>
-          <div className="seo-keywords" aria-label="Related search phrases">
-            {page.relatedKeywords.map((keyword) => (
-              <span key={keyword}>{keyword}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <p className="seo-eyebrow text-center">FAQ</p>
-        <h2 className="seo-faq-title">Common questions</h2>
-        <div className="seo-faq-list">
-          {page.faqs.map((faq) => (
-            <article key={faq.q} className="seo-faq-item">
-              <h3>{faq.q}</h3>
-              <p>{faq.a}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="seo-cta">
-          <div>
-            <p className="seo-eyebrow">Get started</p>
-            <h2>Use Introscribe in your next live conversation</h2>
-            <p>Download the desktop app for real-time transcription, meeting notes, interview support, and contextual AI answers.</p>
-          </div>
-          <a href={baseUrl} className="seo-secondary-link seo-secondary-link--dark">
-            Back to homepage
-          </a>
-        </div>
-      </section>
-    </main>
-  );
 
   const PRIVACY_LAST_UPDATED = "July 1, 2026";
 
@@ -1876,74 +2695,19 @@ export default function introscribeLanding() {
     },
   ];
 
-  const PrivacyPolicyPage = () => (
-    <main className="seo-page privacy-page">
-      <section className="seo-download-hero">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <p className="seo-eyebrow">Legal · Introscribe</p>
-            <h1 className="text-balance">Privacy Policy</h1>
-            <p className="seo-intro">
-              This Privacy Policy explains what information Introscribe collects, how we use it, and the controls you have over your data when you use our desktop app and website.
-            </p>
-            <p className="privacy-updated">Last updated: {PRIVACY_LAST_UPDATED}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-12 md:grid-cols-3">
-        {PRIVACY_HIGHLIGHTS.map(({ icon: Icon, title, body }) => (
-          <article key={title} className="seo-card">
-            <h2>
-              <span className="seo-card-icon" aria-hidden="true"><Icon /></span>
-              <span>{title}</span>
-            </h2>
-            <p>{body}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <div className="privacy-sections">
-          {PRIVACY_SECTIONS.map(({ icon: Icon, title, body }) => (
-            <article key={title} id={title.includes("Cookies") ? "cookies" : undefined} className="privacy-section">
-              <h2 className="privacy-section-heading">
-                <span className="seo-card-icon" aria-hidden="true"><Icon /></span>
-                <span>{title}</span>
-              </h2>
-              <div className="privacy-section-body">{body}</div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <p className="seo-eyebrow text-center">FAQ</p>
-        <h2 className="seo-faq-title">Privacy questions we hear often</h2>
-        <div className="seo-faq-list">
-          {PRIVACY_FAQS.map((faq) => (
-            <article key={faq.q} className="seo-faq-item">
-              <h3>{faq.q}</h3>
-              <p>{faq.a}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="seo-cta">
-          <div>
-            <p className="seo-eyebrow">Questions</p>
-            <h2>Talk to us about your data</h2>
-            <p>Email <a href="mailto:support@introscribe.com">support@introscribe.com</a> for privacy requests, account deletion, or anything else about how Introscribe handles your information.</p>
-          </div>
-          <a href={baseUrl} className="seo-secondary-link seo-secondary-link--dark">
-            Back to homepage
-          </a>
-        </div>
-      </section>
-    </main>
-  );
+  const privacyDoc = {
+      title: "Privacy Policy",
+      intro: "This Privacy Policy explains what information Introscribe collects, how we use it, and the controls you have over your data when you use our desktop app and website.",
+      updated: PRIVACY_LAST_UPDATED,
+      highlights: PRIVACY_HIGHLIGHTS,
+      sections: PRIVACY_SECTIONS,
+      faqs: PRIVACY_FAQS,
+      faqTitle: "Privacy questions we hear often",
+      contact: {
+        title: "Talk to us about your data",
+        body: "Email us for privacy requests, account deletion, or anything else about how Introscribe handles your information.",
+      },
+  };
 
   const TERMS_LAST_UPDATED = "July 1, 2026";
 
@@ -2133,122 +2897,85 @@ export default function introscribeLanding() {
     },
   ];
 
-  const TermsPage = () => (
-    <main className="seo-page privacy-page">
-      <section className="seo-download-hero">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <p className="seo-eyebrow">Legal · Introscribe</p>
-            <h1 className="text-balance">Terms of Service</h1>
-            <p className="seo-intro">
-              These Terms of Service explain the rules for using the Introscribe desktop app, our website, and related services. Please read them carefully before you use Introscribe.
-            </p>
-            <p className="privacy-updated">Last updated: {TERMS_LAST_UPDATED}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-12 md:grid-cols-3">
-        {TERMS_HIGHLIGHTS.map(({ icon: Icon, title, body }) => (
-          <article key={title} className="seo-card">
-            <h2>
-              <span className="seo-card-icon" aria-hidden="true"><Icon /></span>
-              <span>{title}</span>
-            </h2>
-            <p>{body}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <div className="privacy-sections">
-          {TERMS_SECTIONS.map(({ icon: Icon, title, body }) => (
-            <article key={title} className="privacy-section">
-              <h2 className="privacy-section-heading">
-                <span className="seo-card-icon" aria-hidden="true"><Icon /></span>
-                <span>{title}</span>
-              </h2>
-              <div className="privacy-section-body">{body}</div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <p className="seo-eyebrow text-center">FAQ</p>
-        <h2 className="seo-faq-title">Common questions about the Terms</h2>
-        <div className="seo-faq-list">
-          {TERMS_FAQS.map((faq) => (
-            <article key={faq.q} className="seo-faq-item">
-              <h3>{faq.q}</h3>
-              <p>{faq.a}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="seo-cta">
-          <div>
-            <p className="seo-eyebrow">Questions</p>
-            <h2>Need help with the Terms?</h2>
-            <p>Email <a href="mailto:support@introscribe.com">support@introscribe.com</a> and we will get back to you about anything in this document.</p>
-          </div>
-          <a href={baseUrl} className="seo-secondary-link seo-secondary-link--dark">
-            Back to homepage
-          </a>
-        </div>
-      </section>
-    </main>
-  );
+  const termsDoc = {
+      title: "Terms of Service",
+      intro: "These Terms of Service explain the rules for using the Introscribe desktop app, our website, and related services. Please read them carefully before you use Introscribe.",
+      updated: TERMS_LAST_UPDATED,
+      highlights: TERMS_HIGHLIGHTS,
+      sections: TERMS_SECTIONS,
+      faqs: TERMS_FAQS,
+      faqTitle: "Common questions about the Terms",
+      contact: {
+        title: "Need help with the Terms?",
+        body: "Email us and we will get back to you about anything in this document.",
+      },
+  };
 
   return (
   <div className="min-h-screen text-zinc-900 dark:text-white">
       {isMobile && showDesktopModal && (
-        <div className="desktop-modal" role="dialog" aria-modal="true" aria-label="Desktop required">
-          <div className="desktop-modal__backdrop" onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}></div>
-          <div className="desktop-modal__card">
+        <div className="desktop-modal" role="dialog" aria-modal="true" aria-labelledby="desktop-modal-title" aria-describedby="desktop-modal-lead">
+          <button type="button" className="desktop-modal__backdrop" aria-label="Close dialog" onClick={closeDesktopPrompt} />
+          <div className="desktop-modal__card" ref={desktopModalRef} tabIndex={-1}>
+            <div className="desktop-modal__grip" aria-hidden="true" />
             <div className="desktop-modal__header">
-          <div>
-            <p className="desktop-modal__eyebrow">Desktop required</p>
-            <h3 className="desktop-modal__title">Open on desktop to install</h3>
-            <p className="desktop-modal__lead">{desktopAppCopy}</p>
-          </div>
+              <div>
+                <h3 id="desktop-modal-title" className="desktop-modal__title">Open on desktop</h3>
+                <p id="desktop-modal-lead" className="desktop-modal__lead">Introscribe is available for macOS and Windows. Copy this link and open it on your computer to download the app.</p>
+              </div>
+              <button type="button" className="desktop-modal__close" onClick={closeDesktopPrompt} aria-label="Close dialog">
+                <X size={18} aria-hidden="true" />
+              </button>
             </div>
             <div className="desktop-modal__body">
-              <div className="desktop-modal__requirements" aria-label="Optimal computer requirements">
-                <p className="desktop-modal__label">Optimal computer requirements</p>
-                {desktopRequirements.map((requirement) => (
-                  <div className="desktop-modal__requirement-group" key={requirement.label}>
-                    <h4>{requirement.label}</h4>
-                    <ul>
-                      {requirement.items.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+              <div className="desktop-modal__steps" aria-label="How to install">
+                <div><span>1</span><p>Copy the website link</p></div>
+                <div><span>2</span><p>Open it on your computer</p></div>
               </div>
-              <button type="button" className="desktop-modal__action desktop-modal__action--ghost" onClick={handleCopyDesktopLink}>
-                Copy link to open on desktop
+              <button type="button" className="desktop-modal__action" onClick={handleCopyDesktopLink}>
+                {shareStatus.startsWith("Link copied") ? <Check size={18} aria-hidden="true" /> : <Copy size={18} aria-hidden="true" />}
+                {shareStatus.startsWith("Link copied") ? "Link copied" : "Copy desktop link"}
               </button>
-              <button
-                type="button"
-                className="desktop-modal__action desktop-modal__action--ghost desktop-modal__close"
-                onClick={() => { setShowDesktopModal(false); setShareStatus(""); }}
-              >
-                Close
-              </button>
-              {shareStatus ? (
-                <p className="desktop-modal__hint">{shareStatus}</p>
-              ) : (
-                <p className="desktop-modal__hint">Open this site on a supported desktop computer to download and install Introscribe.</p>
+              <p className="desktop-modal__hint" role="status">{shareStatus || "Available for macOS and Windows."}</p>
+              {shareStatus.startsWith("Copy unavailable") && (
+                <input
+                  className="desktop-modal__link"
+                  aria-label="Desktop website link"
+                  value={desktopLandingLink}
+                  readOnly
+                  onFocus={(event) => event.currentTarget.select()}
+                />
               )}
+              <details className="desktop-modal__requirements">
+                <summary>Check desktop requirements <ChevronDown size={16} aria-hidden="true" /></summary>
+                <div className="desktop-modal__requirements-grid">
+                  {desktopRequirements.map((requirement) => (
+                    <div className="desktop-modal__requirement-group" key={requirement.label}>
+                      <h4>{requirement.label}</h4>
+                      <ul>
+                        {requirement.items.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
             </div>
           </div>
         </div>
       )}
-      {showCookieSettings && <CookieSettingsModal />}
+      {showCookieSettings && (
+        <CookieSettings
+          initial={cookiePreferences}
+          onSave={persistCookiePreferences}
+          onClose={() => setShowCookieSettings(false)}
+          privacyHref={`${baseUrl}privacy#cookies`}
+          onOpenPrivacy={() => {
+            setShowCookieSettings(false);
+            navigateTo(`${baseUrl}privacy`);
+            setTimeout(() => document.getElementById("cookies")?.scrollIntoView({ behavior: "smooth" }), 80);
+          }}
+        />
+      )}
       {showNotFound ? (
         <section className="landing-bg landing-bg-animate page-landing-bg w-full pb-16">
           <Header />
@@ -2271,14 +2998,38 @@ export default function introscribeLanding() {
             </button>
           </main>
         </section>
-      ) : isPrivacyPage ? (
-        <PrivacyPolicyPage />
-      ) : isTermsPage ? (
-        <TermsPage />
+      ) : isPrivacyPage || isTermsPage ? (
+        <LegalPage
+          kind={isPrivacyPage ? "privacy" : "terms"}
+          doc={isPrivacyPage ? privacyDoc : termsDoc}
+          baseUrl={baseUrl}
+          dark={dark}
+          onToggleTheme={() => setDark((d) => !d)}
+          onNavigate={(kind) => navigateTo(`${baseUrl}${kind}`)}
+        />
       ) : isDownloadPage ? (
         <DownloadPage />
       ) : activeSeoPage ? (
-        <SeoContentPage page={activeSeoPage} />
+        <ArticlePage
+          page={activeSeoPage}
+          pages={seoPages}
+          baseUrl={baseUrl}
+          dark={dark}
+          onToggleTheme={() => setDark((d) => !d)}
+          onNavigate={(slug) => navigateTo(`${baseUrl}${slug}`)}
+          actions={
+            isMobile ? (
+              <DesktopRequiredCTA tone="light" align="start" />
+            ) : (
+              downloadOptions.map((opt, index) => (
+                <a key={opt.label} href={opt.href} className={`article-btn ${index === 0 ? "article-btn--primary" : ""}`}>
+                  <DownloadPlatformIcon platform={opt.platform} />
+                  {opt.label}
+                </a>
+              ))
+            )
+          }
+        />
       ) : (
         <main data-scroll-reveal-root>
           {/* Hero */}
@@ -2294,7 +3045,7 @@ export default function introscribeLanding() {
           <p className="mt-4 text-pretty text-white/80 dark:text-zinc-300 hero-lead hero-cta-animate">
             Transcribe every word, capture every insight, <br /> and get intelligent suggestions all in real time.
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
+          <div ref={heroRef} className="mt-6 flex flex-wrap items-center justify-center gap-4 hero-cta-animate">
             {isMobile ? (
               <DesktopRequiredCTA tone="dark" />
             ) : os === "mac" ? (
@@ -2351,27 +3102,24 @@ export default function introscribeLanding() {
       </section>
 
       {/* Benefits */}
-      <section id="benefits" className="mx-auto max-w-7xl px-4 py-16">
-        <h2 className="benefit-headline price-number text-center mt-3">
-          <span>Listen,</span>
-          <span>Capture and</span>
-          <span>Respond wisely.</span>
-        </h2>
-        <p className="mx-auto mt-2 max-w-2xl text-center text-zinc-600 dark:text-zinc-300">
-          An AI meeting copilot that records, summarizes, and turns conversations into structured, shareable outcomes.
-        </p>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 md:grid-cols-4">
-          {benefits.map((b, i) => (
-            <div key={i} className="benefit-glass group">
-              <div className="benefit-icon-box">
-                <b.icon className="h-5 w-5 text-zinc-700 dark:text-zinc-200" />
-              </div>
-              <h3 className="mt-4 font-semibold tracking-tight text-zinc-900 dark:text-white">{b.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">{b.desc}</p>
-            </div>
-          ))}
+      <section id="benefits" className="benefits mx-auto max-w-7xl px-4 py-16 md:py-24" aria-labelledby="benefits-title">
+        <div className="benefits-head">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium dark:border-white/10">
+            <Mic className="h-3.5 w-3.5" /> In every conversation
+          </div>
+          <h2 id="benefits-title" className="price-number">
+            Listen, capture, and <span className="benefits-head__accent">respond wisely.</span>
+          </h2>
+          <p>An AI meeting copilot that records, summarizes, and turns conversations into structured, shareable outcomes.</p>
+        </div>
+
+        <div className="benefits-grid">
+          {benefits.map((b) => <BenefitCard key={b.kind} benefit={b} />)}
         </div>
       </section>
+
+      {/* Use cases */}
+      <UseCasesShowcase baseUrl={baseUrl} />
 
   {/* Feature Sections */}
       <section id="how" className="mx-auto max-w-7xl px-4 py-6 md:py-10">
@@ -2396,7 +3144,8 @@ export default function introscribeLanding() {
 	                      >
 	                        <div className="privacy-preview-media privacy-comparison" aria-label="Visibility comparison preview">
 	                          <video
-	                            src="/seen.mp4"
+	                            key={dark ? "seen-dark" : "seen"}
+		                            src={dark ? "/seen-dark.mp4" : "/seen.mp4"}
 	                            className="privacy-comparison-video"
 	                            autoPlay
 	                            muted
@@ -2408,7 +3157,8 @@ export default function introscribeLanding() {
 	                          <span className="privacy-preview-label privacy-preview-label--seen">Visible to you</span>
 	                          <div className="privacy-comparison-after">
 	                            <video
-	                              src="/unseen.mp4"
+	                              key={dark ? "unseen-dark" : "unseen"}
+		                              src={dark ? "/unseen-dark.mp4" : "/unseen.mp4"}
 	                              className="privacy-comparison-video"
 	                              autoPlay
 	                              muted
@@ -2441,7 +3191,8 @@ export default function introscribeLanding() {
 	                      <div className="privacy-preview-card">
 	                        <div ref={featureOverlayStageRef} className="privacy-preview-media feature-overlay-preview-stage">
 	                          <video
-	                            src="/overlay_bg.mp4"
+	                            key={dark ? "overlay-dark" : "overlay"}
+		                            src={dark ? "/overlay_bg-dark.mp4" : "/overlay_bg.mp4"}
 	                            className="privacy-comparison-video feature-overlay-preview-bg"
 	                            autoPlay
 	                            muted
@@ -2452,7 +3203,7 @@ export default function introscribeLanding() {
 	                          />
 	                          <DraggableFeatureSessionOverlay
 	                            stageRef={featureOverlayStageRef}
-	                            responsiveCollapseBelow={OVERLAY_COMPACT_BREAKPOINT}
+	                            defaultCollapsed
 	                            className="feature-session-overlay--undetectable"
 	                          />
 	                          <span className="feature-drag-hint" aria-hidden="true">Click and drag the overlay</span>
@@ -2468,28 +3219,7 @@ export default function introscribeLanding() {
             }
 
             if (i === 1) {
-              return (
-                <div key={i} className="grid gap-8 md:pt-8">
-                  <div className="mx-auto max-w-3xl text-center">
-                    <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium dark:border-white/10">
-                      <f.icon className="h-3.5 w-3.5" /> {f.tag}
-                    </div>
-                    <h3 className="price-number font-semibold leading-[1.05] tracking-tight whitespace-pre-line">{f.title}</h3>
-                    <p className="mx-auto mt-2 max-w-2xl text-zinc-600 dark:text-zinc-300">{f.desc}</p>
-                  </div>
-                  <div className="mx-auto w-full max-w-5xl">
-                    <div className="privacy-preview-card ask-clarify-preview-card">
-                      <img
-                        src="/notetaking.jpg"
-                        alt="Ask and clarify mid-conversation note taking preview"
-                        className="ask-clarify-preview-image"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
+              return <NotesSection key={i} lead={f.desc} />;
             }
 
             if (f.stats) {
@@ -2505,7 +3235,8 @@ export default function introscribeLanding() {
                   <div className="grid items-center gap-8 md:grid-cols-2">
                     <div ref={transcriptionOverlayStageRef} className="transcription-media-holder relative rounded-3xl overflow-hidden border bg-white shadow-md feature-overlay-preview-stage dark:border-white/10 dark:bg-zinc-950">
                       <video
-                        src="/live_transcript.mp4"
+                        key={dark ? "transcript-dark" : "transcript"}
+                        src={dark ? "/live_transcript-dark.mp4" : "/live_transcript.mp4"}
                         className="h-full w-full object-cover"
                         autoPlay
                         muted
@@ -2564,7 +3295,8 @@ export default function introscribeLanding() {
 	                ) : f.stats ? (
 	                  <div ref={transcriptionOverlayStageRef} className="relative rounded-3xl overflow-hidden border bg-white shadow-md feature-overlay-preview-stage dark:border-white/10 dark:bg-zinc-950">
 	                    <video
-	                      src="/live_transcript.mp4"
+	                      key={dark ? "transcript-dark" : "transcript"}
+                        src={dark ? "/live_transcript-dark.mp4" : "/live_transcript.mp4"}
 	                      className="h-full w-full object-cover"
 	                      autoPlay
 	                      muted
@@ -2584,7 +3316,8 @@ export default function introscribeLanding() {
 	                ) : (
 	                  <div className="relative rounded-3xl overflow-hidden border bg-white shadow-md dark:border-white/10 dark:bg-zinc-950">
 	                    <video
-	                      src="/live_transcript.mp4"
+	                      key={dark ? "transcript-dark" : "transcript"}
+                        src={dark ? "/live_transcript-dark.mp4" : "/live_transcript.mp4"}
 	                      className="h-full w-full object-cover"
 	                      autoPlay
 	                      muted
@@ -2625,71 +3358,85 @@ export default function introscribeLanding() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="mx-auto max-w-7xl px-4 py-16">
-        <div className="text-center">
-          <h2 className="price-number">Pricing</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-zinc-600 dark:text-zinc-300">
-            Simple, transparent pricing for collaborators and compliance‑focused teams.
-          </p>
-          <div className="mt-6 billing-toggle-wrapper">
-            <div className={`billing-toggle billing-toggle-glass`}> 
-              <span ref={indicatorRef} className="billing-toggle-indicator" aria-hidden="true"></span>
-              <button
-                ref={monthlyBtnRef}
-                className={!yearly ? 'active' : ''}
-                onClick={() => setYearly(false)}
-              >
-                Monthly
-              </button>
-              <button
-                ref={yearlyBtnRef}
-                className={yearly ? 'active' : ''}
-                onClick={() => setYearly(true)}
-              >
-                Yearly (save 20%)
-              </button>
-            </div>
+      <section id="pricing" className="pricing mx-auto max-w-7xl px-4 py-16 md:py-24" aria-labelledby="pricing-title">
+        <div className="pricing-head">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium dark:border-white/10">
+            <CreditCard className="h-3.5 w-3.5" /> Pricing
+          </div>
+          <h2 id="pricing-title" className="price-number">
+            Simple pricing. <span className="pricing-head__accent">No surprises.</span>
+          </h2>
+          <p>Start free, then upgrade when Introscribe becomes part of every call.</p>
+
+          <div className="billing-toggle" role="group" aria-label="Billing period">
+            <span ref={indicatorRef} className="billing-toggle__indicator" aria-hidden="true"></span>
+            <button type="button" ref={monthlyBtnRef} className={!yearly ? "is-active" : ""} aria-pressed={!yearly} onClick={() => setYearly(false)}>
+              Monthly
+            </button>
+            <button type="button" ref={yearlyBtnRef} className={yearly ? "is-active" : ""} aria-pressed={yearly} onClick={() => setYearly(true)}>
+              Yearly<span className="billing-toggle__save">−20%</span>
+            </button>
           </div>
         </div>
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {plans.map((p, i) => (
-            <div key={i} className={`pricing-card ${p.highlight ? 'pricing-card--highlight' : ''} ${p.name.includes('Pro') ? 'pricing-card--custom' : ''}`}> 
-              <span className="plan-ribbon">{p.name}</span>
-              <div className="mt-4">
-                <Price amount={yearly ? p.priceY : p.priceM} />
-              </div>
-              <ul className="features-list mt-5 space-y-3 text-sm">
-                {p.bullets.map((b, bi) => (
-                  <li key={bi} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 flex-none" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-6">
-                {(p.name.includes('Plus') || p.name.includes('Pro')) ? (
-                  <a
-                    href={`https://app.introscribe.com/?plan=${(p.slug ?? p.name).toLowerCase()}${yearly ? '&interval=yearly&autologin=1' : ''}`}
-                    className="btn-muted pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center text-center"
-                  >
-                    Get started
-                  </a>
-                ) : p.cta === 'Book a Call' ? (
-                  <button className="btn-gradient pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center">
-                    Get started
-                  </button>
-                ) : (
-                  <a
-                    href={`${baseUrl}download`}
-                    className="btn-muted pricing-card-cta pricing-cta-glass w-full inline-flex items-center justify-center text-center"
-                  >
-                    Download for free
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
+
+        <div className="plans-grid">
+          {plans.map((p) => {
+            const isPaid = p.priceM > 0;
+            const amount = yearly ? p.priceY : p.priceM;
+            return (
+              <article key={p.slug} className={`plan-card ${p.highlight ? "plan-card--featured" : ""}`}>
+                <div className="plan-card__top">
+                  <h3>{p.name.replace(/ Plan$/, "")}</h3>
+                  {p.highlight ? <span className="plan-card__badge">Most popular</span> : null}
+                </div>
+                <p className="plan-card__tagline">{p.tagline}</p>
+
+                <div className="plan-card__price" key={`${p.slug}-${yearly}`}>
+                  {isPaid ? (
+                    <>
+                      <span className="plan-card__amount">${amount.toFixed(2)}</span>
+                      <span className="plan-card__cycle">/ month</span>
+                    </>
+                  ) : (
+                    <span className="plan-card__amount">$0</span>
+                  )}
+                </div>
+                <p className="plan-card__note">
+                  {!isPaid ? "Free forever, no card required" : yearly ? `Billed $${(p.priceY * 12).toFixed(2)} yearly` : "Billed monthly, cancel anytime"}
+                </p>
+
+                <a
+                  href={isPaid
+                    ? `https://app.introscribe.com/?plan=${p.slug}${yearly ? "&interval=yearly&autologin=1" : ""}`
+                    : `${baseUrl}download`}
+                  className="plan-card__cta"
+                >
+                  {isPaid ? `Get ${p.name.replace(/ Plan$/, "")}` : "Download for free"}
+                  <ArrowRight aria-hidden="true" />
+                </a>
+
+                <div className="plan-card__features">
+                  <p>{p.slug === "plus" ? "Everything in Free, plus" : "What's included"}</p>
+                  <ul>
+                    {p.bullets.map((b) => (
+                      <li key={b}>
+                        <span className="plan-card__check" aria-hidden="true"><Check /></span>
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            );
+          })}
         </div>
+
+        <ul className="plans-includes" aria-label="Included in every plan">
+          <li><Monitor aria-hidden="true" /> macOS &amp; Windows</li>
+          <li><MessageSquareText aria-hidden="true" /> Works with Zoom, Meet &amp; Teams</li>
+          <li><Lock aria-hidden="true" /> Encrypted in transit and at rest</li>
+          <li><Check aria-hidden="true" /> Cancel anytime</li>
+        </ul>
       </section>
 
       {/* What Customers Say */}
@@ -2760,35 +3507,52 @@ export default function introscribeLanding() {
         </div>
       </section>
 
-      <section className="post-faq-arch" aria-label="Introscribe architecture overview">
-        <div ref={archOverlayStageRef} className="post-faq-arch__frame">
-          <img
-            src="/arch.png"
-            alt="Introscribe architecture overview"
-            className="post-faq-arch__image post-faq-arch__image--light"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            src="/arch_dark.png"
-            alt="Introscribe architecture overview"
-            className="post-faq-arch__image post-faq-arch__image--dark"
-            loading="lazy"
-            decoding="async"
-          />
-          <DraggableFeatureSessionOverlay
-            stageRef={archOverlayStageRef}
-            defaultCollapsed
-            placement="top"
-            topOffset={18}
-            className="feature-session-overlay--arch"
-          />
+      {/* Meeting notes in 3 steps */}
+      <section id="how-it-works" className="steps mx-auto max-w-7xl px-4 py-16 md:py-24" aria-labelledby="steps-title">
+        <div className="steps-head">
+          <h2 id="steps-title" className="price-number">Meeting notes in 3 steps</h2>
+          <p>The easiest way to get clean, shareable meeting notes.</p>
         </div>
+        <ol className="steps-grid">
+          {MEETING_STEPS.map((step, index) => (
+            <li key={step.title} className="step-card">
+              <div className="step-card__visual">
+                <div className="step-card__media">
+                  <StepArt art={step.art} />
+                </div>
+              </div>
+              <h3>
+                <span className="step-card__num">{index + 1}</span>
+                {step.title}
+              </h3>
+              <p>{step.desc}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
         </main>
       )}
       <Footer />
+      {isLandingPage ? (
+        <div className={`floating-download ${heroPassed ? "is-visible" : ""}`} aria-hidden={!heroPassed}>
+          {isMobile ? (
+            <button type="button" className="desktop-cta-btn" onClick={openDesktopPrompt} tabIndex={heroPassed ? undefined : -1}>
+              Open on Desktop
+            </button>
+          ) : (
+            <a
+              href={os === "windows" ? windowsInstaller : macInstaller}
+              className={`download-btn glassy ${os === "windows" ? "" : "download-btn--mac"}`}
+              title={os === "windows" ? "Download Windows installer" : "Download macOS installer"}
+              tabIndex={heroPassed ? undefined : -1}
+            >
+              <DownloadPlatformIcon platform={os === "windows" ? "windows" : "mac"} />
+              {os === "windows" ? "Get for Windows" : "Get for Mac OS"}
+            </a>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
